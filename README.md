@@ -1,16 +1,44 @@
-# React + Vite
+# Portfolio App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React portfolio website built with Vite, designed to showcase projects, skills, and contact information.
 
-Currently, two official plugins are available:
+## 🚀 Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Built with React 19 and Vite for fast development and optimized build output.
+- Uses React Router for client-side navigation.
+- Includes modern tooling with ESLint for code quality.
 
-## React Compiler
+## 💻 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Home and portfolio sections
+- Project showcase layout
+- Responsive design support
+- Fast local development with Vite
 
-## Expanding the ESLint configuration
+## 📦 Available Scripts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+From the project root, run:
+
+- `npm install` - install dependencies
+- `npm run dev` - start the development server
+- `npm run build` - build production files
+- `npm run preview` - serve the production build locally
+- `npm run lint` - run ESLint across the project
+
+## 🛠️ Technologies
+
+- React
+- Vite
+- React Router DOM
+- ESLint
+
+## 📁 Project Structure
+
+- `src/` - application source code
+- `public/` - static assets
+- `index.html` - app entry HTML
+- `vite.config.js` - Vite configuration
+
+## 📌 Notes
+
+Update the project content, visuals, and portfolio items to reflect your own work and personal branding.
