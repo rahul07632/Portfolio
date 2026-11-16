@@ -1,4 +1,8 @@
 node_modules/
+Portfolio/
+Portfolio/node_modules/
+Portfolio/dist/
+Portfolio/.vite/
 .env
 .env.*
 
