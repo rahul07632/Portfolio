@@ -1,0 +1,13 @@
+/* Responsive adjustments across Desktop, Tablet, and Mobile */
+@media (max-width: 1024px) {
+  .custom-cursor-follower {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-avatar-stage {
+    max-width: 100%;
+    padding: 1rem;
+  }
+}

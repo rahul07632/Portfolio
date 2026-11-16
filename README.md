@@ -1,44 +1,17 @@
-# Portfolio App
+# Rahul Vishwakarma - Personal Portfolio
 
-A React portfolio website built with Vite, designed to showcase projects, skills, and contact information.
+A modern, responsive, and modular personal portfolio built with **React**, **Vite**, and **Tailwind CSS**.
 
-## 🚀 Project Overview
+## Getting Started (Run Locally)
 
-- Built with React 19 and Vite for fast development and optimized build output.
-- Uses React Router for client-side navigation.
-- Includes modern tooling with ESLint for code quality.
-
-## 💻 Features
-
-- Home and portfolio sections
-- Project showcase layout
-- Responsive design support
-- Fast local development with Vite
-
-## 📦 Available Scripts
-
-From the project root, run:
-
-- `npm install` - install dependencies
-- `npm run dev` - start the development server
-- `npm run build` - build production files
-- `npm run preview` - serve the production build locally
-- `npm run lint` - run ESLint across the project
-
-## 🛠️ Technologies
-
-- React
-- Vite
-- React Router DOM
-- ESLint
-
-## 📁 Project Structure
-
-- `src/` - application source code
-- `public/` - static assets
-- `index.html` - app entry HTML
-- `vite.config.js` - Vite configuration
-
-## 📌 Notes
-
-Update the project content, visuals, and portfolio items to reflect your own work and personal branding.
+1. Extract this zip folder.
+2. Open terminal in the project directory (`rahul-portfolio`).
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open your browser and go to `http://localhost:5173`.

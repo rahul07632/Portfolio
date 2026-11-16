@@ -1,0 +1,35 @@
+/* Explicit Dark & Light Theme Form & Surface Visibility Guarantees */
+.theme-dark {
+  --bg-primary: #050816;
+  --text-primary: #f1f5f9;
+  --input-bg: #020617;
+  --input-text: #ffffff;
+  --input-placeholder: #94a3b8;
+  --input-border: #334155;
+  color-scheme: dark;
+}
+
+.theme-light {
+  --bg-primary: #f8fafc;
+  --text-primary: #0f172a;
+  --input-bg: #f8fafc;
+  --input-text: #0f172a;
+  --input-placeholder: #94a3b8;
+  --input-border: #cbd5e1;
+  color-scheme: light;
+}
+
+/* Prevent browser autofill from turning dark inputs unreadable white-on-white */
+.theme-dark input:-webkit-autofill,
+.theme-dark textarea:-webkit-autofill {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #020617 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.theme-light input:-webkit-autofill,
+.theme-light textarea:-webkit-autofill {
+  -webkit-text-fill-color: #0f172a !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
