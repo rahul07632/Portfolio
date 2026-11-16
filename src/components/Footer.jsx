@@ -1,5 +1,5 @@
 import React from 'react';
-import { GitBranch, BriefcaseBusiness, Mail } from 'lucide-react';
+import { GitBranch, BriefcaseBusiness } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
 export default function Footer({ isDark }) {
@@ -39,13 +39,6 @@ export default function Footer({ isDark }) {
           >
             <BriefcaseBusiness className="w-4 h-4" />
             <span>LinkedIn</span>
-          </a>
-          <a
-            href={`mailto:${PERSONAL_INFO.email}`}
-            className="text-xs font-mono hover:text-cyan-400 flex items-center gap-1.5"
-          >
-            <Mail className="w-4 h-4" />
-            <span>Email</span>
           </a>
         </div>
 
