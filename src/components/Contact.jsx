@@ -73,35 +73,6 @@ export default function Contact({ isDark }) {
     return Object.keys(errors).length === 0;
   };
 
-  const buildEncodedMailtoUrl = () => {
-    const cleanName = formData.name.trim();
-    const cleanEmail = formData.email.trim();
-    const cleanSubject = formData.subject.trim();
-    const cleanMessage = formData.message.trim();
-
-    const emailBody = [
-      `Hello Rahul,`,
-      ``,
-      `You have received a new portfolio inquiry:`,
-      `----------------------------------------`,
-      `Name: ${cleanName}`,
-      `Email: ${cleanEmail}`,
-      `Subject: ${cleanSubject}`,
-      `----------------------------------------`,
-      ``,
-      `Message:`,
-      cleanMessage,
-      ``,
-      `----------------------------------------`,
-      `Sent from Rahul Vishwakarma's Portfolio Website`
-    ].join('\r\n');
-
-    return `mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(
-      `[Portfolio Contact] ${cleanSubject} — from ${cleanName}`
-    )}&body=${encodeURIComponent(emailBody)}`;
-  };
-
-
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ type: 'idle', message: '', mailtoUrl: '' });
@@ -115,58 +86,44 @@ export default function Contact({ isDark }) {
       return;
     }
 
-    const mailtoUrl = buildEncodedMailtoUrl();
-
     try {
-      if (IS_EMAILJS_READY) {
-        const templateParams = {
-          from_name: formData.name.trim(),
-          from_email: formData.email.trim(),
-          subject: formData.subject.trim(),
-          message: formData.message.trim(),
-          to_email: EMAILJS_TARGET_EMAIL,
-          to_name: 'Rahul Vishwakarma'
-        };
-
-        await emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID,
-          templateParams,
-          { publicKey: EMAILJS_PUBLIC_KEY }
-        );
-
-        setFormData({ name: '', email: '', subject: '', message: '' });
+      if (!IS_EMAILJS_READY) {
         setFormStatus({
-          type: 'success',
-          message: `Your message has been sent successfully to ${EMAILJS_TARGET_EMAIL}.`,
+          type: 'error',
+          message: 'Email delivery is not configured yet. Please activate the EmailJS service and verify the environment values before sending.',
           mailtoUrl: ''
         });
         return;
       }
 
-      console.warn('EmailJS fallback triggered. Missing or invalid env values.', {
-        serviceId: EMAILJS_SERVICE_ID,
-        templateId: EMAILJS_TEMPLATE_ID,
-        publicKey: EMAILJS_PUBLIC_KEY ? 'present' : 'missing',
-        targetEmail: EMAILJS_TARGET_EMAIL
-      });
+      const templateParams = {
+        from_name: formData.name.trim(),
+        from_email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
+        to_email: EMAILJS_TARGET_EMAIL,
+        to_name: 'Rahul Vishwakarma'
+      };
 
-      window.location.href = mailtoUrl;
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
 
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setFormStatus({
-        type: 'info',
-        message: `Your default mail app is opening with the message pre-filled for ${PERSONAL_INFO.email}. Please review and click Send to complete delivery.`,
-        mailtoUrl
+        type: 'success',
+        message: `Your message has been sent successfully to ${EMAILJS_TARGET_EMAIL}.`,
+        mailtoUrl: ''
       });
     } catch (error) {
       console.error('Contact form submission failed:', error);
-
-      window.location.href = mailtoUrl;
-
       setFormStatus({
-        type: 'info',
-        message: `Your default mail app is opening with the message pre-filled for ${PERSONAL_INFO.email}. Please review and click Send to complete delivery.`,
-        mailtoUrl
+        type: 'error',
+        message: 'Email delivery failed. Please verify your EmailJS service, template, and credentials and try again.',
+        mailtoUrl: ''
       });
     }
   };
