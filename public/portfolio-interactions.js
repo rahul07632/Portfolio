@@ -524,11 +524,6 @@
     resumeModal.classList.remove('hidden');
     resumeModal.classList.add('flex');
   }
-  function hideResume() {
-    if (!resumeModal) return;
-    resumeModal.classList.add('hidden');
-    resumeModal.classList.remove('flex');
-  }
   ['openResumeBtn', 'heroResumeBtn', 'overlayResumeBtn'].forEach(function (id) {
     const el = document.getElementById(id);
     if (el) el.addEventListener('click', function () {
@@ -536,28 +531,6 @@
       showResume();
     });
   });
-  const closeResumeBtn = document.getElementById('closeResumeBtn');
-  if (closeResumeBtn) closeResumeBtn.addEventListener('click', hideResume);
-
-  const printResumeBtn = document.getElementById('printResumeBtn');
-  if (printResumeBtn) printResumeBtn.addEventListener('click', function () { window.print(); });
-
-  const resumePublicUrl = '/resume.html';
-  const resumeViewer = document.getElementById('resumeViewer');
-  if (resumeViewer) resumeViewer.src = resumePublicUrl;
-
-  const downloadResumeBtn = document.getElementById('downloadResumeBtn');
-  if (downloadResumeBtn) {
-    downloadResumeBtn.addEventListener('click', function () {
-      const a = document.createElement('a');
-      a.href = resumePublicUrl;
-      a.download = 'resume.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      toast('✓ Resume downloaded');
-    });
-  }
 
   // 11. Scroll Reveal Observer
   const reveals = document.querySelectorAll('.editorial-reveal');
