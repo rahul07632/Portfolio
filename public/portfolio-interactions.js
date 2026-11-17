@@ -515,74 +515,7 @@
     });
   });
 
-  // 9. Contact Form & Copy Actions
-  const copyEmailBtn = document.getElementById('copyEmailBtn');
-  const copyPhoneBtn = document.getElementById('copyPhoneBtn');
-  const copyDraftBtn = document.getElementById('copyDraftBtn');
-  const contactForm = document.getElementById('contactForm');
-  const contactFeedback = document.getElementById('contactFeedback');
-
-  if (copyEmailBtn) copyEmailBtn.addEventListener('click', function () { copyValue('rahulvishwakarma13211@gmail.com', 'email'); });
-  if (copyPhoneBtn) copyPhoneBtn.addEventListener('click', function () { copyValue('+91 7879260763', 'phone number'); });
-
-  function checkContactForm() {
-    const n = document.getElementById('cName');
-    const e = document.getElementById('cEmail');
-    const s = document.getElementById('cSubject');
-    const m = document.getElementById('cMessage');
-    const en = document.getElementById('cErrName');
-    const ee = document.getElementById('cErrEmail');
-    const es = document.getElementById('cErrSubject');
-    const em = document.getElementById('cErrMessage');
-
-    const nv = n ? n.value.trim() : '';
-    const ev = e ? e.value.trim() : '';
-    const sv = s ? s.value.trim() : '';
-    const mv = m ? m.value.trim() : '';
-    let ok = true;
-
-    if (nv.length < 2) { if (en) en.classList.remove('hidden'); ok = false; } else if (en) en.classList.add('hidden');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ev)) { if (ee) ee.classList.remove('hidden'); ok = false; } else if (ee) ee.classList.add('hidden');
-    if (sv.length < 2) { if (es) es.classList.remove('hidden'); ok = false; } else if (es) es.classList.add('hidden');
-    if (mv.length < 10) { if (em) em.classList.remove('hidden'); ok = false; } else if (em) em.classList.add('hidden');
-
-    return { ok: ok, name: nv, email: ev, subject: sv, message: mv };
-  }
-
-  if (contactForm) {
-    contactForm.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      const res = checkContactForm();
-      if (!res.ok) {
-        toast('Please complete all required fields.');
-        return;
-      }
-      const mailto = 'mailto:rahulvishwakarma13211@gmail.com?subject=' +
-        encodeURIComponent(res.subject + ' — ' + res.name) +
-        '&body=' + encodeURIComponent('From: ' + res.name + ' (' + res.email + ')\n\n' + res.message);
-
-      if (contactFeedback) {
-        contactFeedback.className = 'p-4 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 font-mono text-xs space-y-2';
-        contactFeedback.innerHTML =
-          '<div class="font-semibold text-emerald-400">✓ Message Validated</div>' +
-          '<div>Click below to dispatch directly via your email client to <strong>rahulvishwakarma13211@gmail.com</strong>:</div>' +
-          '<a href="' + mailto + '" class="inline-block px-4 py-2 rounded-full accent-bg font-bold">Open Mail Client ↗</a>';
-        contactFeedback.classList.remove('hidden');
-      }
-      toast('✓ Email draft prepared for Rahul!');
-    });
-  }
-
-  if (copyDraftBtn) {
-    copyDraftBtn.addEventListener('click', function () {
-      const res = checkContactForm();
-      if (!res.ok) {
-        copyValue('rahulvishwakarma13211@gmail.com', 'email address');
-        return;
-      }
-      copyValue('To: rahulvishwakarma13211@gmail.com\nFrom: ' + res.name + ' <' + res.email + '>\nSubject: ' + res.subject + '\n\n' + res.message, 'message');
-    });
-  }
+  // 9. Contact actions removed to avoid mail client / direct-send options.
 
   // 10. Resume Modal
   const resumeModal = document.getElementById('resumeModal');

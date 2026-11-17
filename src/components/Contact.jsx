@@ -12,16 +12,21 @@ import {
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
-const getEnvValue = (key) => String(import.meta.env[key] ?? '').trim();
+const EMAILJS_CONFIG = {
+  serviceId: 'service_hya1f7g',
+  templateId: 'template_1tlw63b',
+  publicKey: 'oT_CuwLsQ7rDlQxLK',
+  targetEmail: 'rahulvishwakarma13211@gmail.com'
+};
 
-const EMAILJS_SERVICE_ID = getEnvValue('VITE_EMAILJS_SERVICE_ID');
-const EMAILJS_TEMPLATE_ID = getEnvValue('VITE_EMAILJS_TEMPLATE_ID');
-const EMAILJS_PUBLIC_KEY = getEnvValue('VITE_EMAILJS_PUBLIC_KEY');
-const EMAILJS_TARGET_EMAIL = getEnvValue('VITE_TO_EMAIL') || PERSONAL_INFO.email;
+const EMAILJS_SERVICE_ID = EMAILJS_CONFIG.serviceId;
+const EMAILJS_TEMPLATE_ID = EMAILJS_CONFIG.templateId;
+const EMAILJS_PUBLIC_KEY = EMAILJS_CONFIG.publicKey;
+const EMAILJS_TARGET_EMAIL = EMAILJS_CONFIG.targetEmail || PERSONAL_INFO.email;
 const IS_EMAILJS_READY = Boolean(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY);
 
-if (import.meta.env.DEV && !IS_EMAILJS_READY) {
-  console.warn('EmailJS not ready. Check .env values for VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY.');
+if (!IS_EMAILJS_READY) {
+  console.warn('EmailJS config is incomplete. Please check the hardcoded values in Contact.jsx.');
 }
 
 export default function Contact({ isDark }) {
