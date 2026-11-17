@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import {
+  AlertCircle,
+  BriefcaseBusiness,
+  Check,
+  Copy,
+  GitBranch,
   Mail,
   Phone,
-  BriefcaseBusiness,
-  GitBranch,
-  Send,
-  AlertCircle,
-  Copy,
-  Check
+  Send
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
@@ -29,7 +29,23 @@ if (!IS_EMAILJS_READY) {
   console.warn('EmailJS config is incomplete. Please check the hardcoded values in Contact.jsx.');
 }
 
-export default function Contact({ isDark }) {
+const inputClassName = (hasError) =>
+  `w-full rounded-xl border bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] placeholder:text-[var(--muted)] outline-none transition-colors focus:border-[var(--accent)] ${
+    hasError ? 'border-rose-500' : 'border-[var(--border)] hover:border-[var(--accent)]'
+  }`;
+
+function ContactFieldError({ message, id }) {
+  if (!message) return null;
+
+  return (
+    <p id={id} role="alert" className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-rose-600 dark:text-rose-400">
+      <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+      <span>{message}</span>
+    </p>
+  );
+}
+
+export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -44,9 +60,9 @@ export default function Contact({ isDark }) {
   });
   const [copiedKey, setCopiedKey] = useState(null);
 
-  const copyText = (key, text) => {
+  const copyText = async (key, text) => {
     try {
-      navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(text);
     } catch {
       const textarea = document.createElement('textarea');
       textarea.value = text;
@@ -55,6 +71,7 @@ export default function Contact({ isDark }) {
       document.execCommand('copy');
       document.body.removeChild(textarea);
     }
+
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };
@@ -78,8 +95,8 @@ export default function Contact({ isDark }) {
     return Object.keys(errors).length === 0;
   };
 
-  const handleContactSubmit = async (e) => {
-    e.preventDefault();
+  const handleContactSubmit = async (event) => {
+    event.preventDefault();
     setFormStatus({ type: 'idle', message: '', mailtoUrl: '' });
 
     if (!validateForm()) {
@@ -133,431 +150,260 @@ export default function Contact({ isDark }) {
     }
   };
 
-  return (
-    <section id="contact" className="relative z-10 py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mb-12">
-        <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-cyan-400 mb-2">
-          <Mail className="w-4 h-4" />
-          <span>06 / Get In Touch</span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-          Let&apos;s Connect for Opportunities & Projects
-        </h2>
-      </div>
+  const updateField = (field, value) => {
+    setFormData((current) => ({ ...current, [field]: value }));
+    setFormErrors((current) => current[field] ? { ...current, [field]: '' } : current);
+  };
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-5 space-y-4">
-          <div
-            className={`rounded-3xl border p-6 sm:p-8 space-y-6 ${isDark
-              ? 'bg-slate-900/60 border-slate-800/90'
-              : 'bg-white border-slate-200 shadow-sm'
-              }`}
-          >
-            <div>
-              <h3 className="text-xl font-bold mb-2">Direct Contact Channels</h3>
-              <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                Reach out directly via email, phone, LinkedIn, or GitHub.
-              </p>
+  const copyButton = (key, text, label) => (
+    <button
+      type="button"
+      onClick={() => copyText(key, text)}
+      className="rounded-full border hairline p-2 transition-colors hover:border-[var(--accent)] hover:accent-text"
+      aria-label={`Copy ${label}`}
+      title={`Copy ${label}`}
+    >
+      {copiedKey === key ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+    </button>
+  );
+
+  return (
+    <section id="contact" className="border-b hairline py-20 sm:py-28">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-start gap-12 px-4 sm:px-8 lg:grid-cols-12">
+        <div className="space-y-6 editorial-reveal lg:col-span-5">
+          <div>
+            <span className="font-mono text-xs uppercase tracking-widest accent-text">
+              05 // INITIATE CONTACT
+            </span>
+            <h2 className="mt-2 font-display text-3xl font-extrabold uppercase leading-[1.02] tracking-tight sm:text-5xl">
+              Let&apos;s Build
+              <br />
+              <span className="font-serif font-normal italic lowercase">Together</span>
+            </h2>
+          </div>
+          <p className="max-w-lg text-sm leading-relaxed opacity-80 sm:text-base">
+            Open to Full-Stack Developer, Frontend Developer, and entry-level Software Engineering opportunities across India or remote.
+          </p>
+
+          <div className="divide-y hairline border-y">
+            <div className="flex items-center gap-4 py-4">
+              <Mail className="h-4 w-4 shrink-0 accent-text" />
+              <div className="min-w-0 flex-1">
+                <span className="block font-mono text-[10px] opacity-60">EMAIL</span>
+                <a href={`mailto:${PERSONAL_INFO.email}`} className="break-all text-sm font-semibold hover:accent-text">
+                  {PERSONAL_INFO.email}
+                </a>
+              </div>
+              {copyButton('email', PERSONAL_INFO.email, 'email address')}
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start gap-3.5">
-                <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shrink-0">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-xs font-mono text-slate-400">EMAIL</div>
-                  <a
-                    href={`mailto:${PERSONAL_INFO.email}`}
-                    className="text-sm font-semibold hover:text-cyan-400 break-all"
-                  >
-                    {PERSONAL_INFO.email}
-                  </a>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => copyText('email', PERSONAL_INFO.email)}
-                  className="p-2 rounded-lg border border-slate-700 hover:border-cyan-500/40 text-xs"
-                  title="Copy Email"
-                >
-                  {copiedKey === 'email' ? (
-                    <Check className="w-4 h-4 text-emerald-400" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-slate-400" />
-                  )}
-                </button>
+            <div className="flex items-center gap-4 py-4">
+              <Phone className="h-4 w-4 shrink-0 accent-text" />
+              <div className="min-w-0 flex-1">
+                <span className="block font-mono text-[10px] opacity-60">PHONE</span>
+                <a href={`tel:${PERSONAL_INFO.phone}`} className="text-sm font-semibold hover:accent-text">
+                  {PERSONAL_INFO.phone}
+                </a>
               </div>
+              {copyButton('phone', PERSONAL_INFO.phone, 'phone number')}
+            </div>
 
-              <div className="flex items-start gap-3.5">
-                <div className="p-3 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-400 shrink-0">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-xs font-mono text-slate-400">PHONE</div>
-                  <a
-                    href={`tel:${PERSONAL_INFO.phone}`}
-                    className="text-sm font-semibold hover:text-cyan-400"
-                  >
-                    {PERSONAL_INFO.phone}
-                  </a>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => copyText('phone', PERSONAL_INFO.phone)}
-                  className="p-2 rounded-lg border border-slate-700 hover:border-cyan-500/40 text-xs"
-                  title="Copy Phone"
-                >
-                  {copiedKey === 'phone' ? (
-                    <Check className="w-4 h-4 text-emerald-400" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-slate-400" />
-                  )}
-                </button>
+            <div className="flex items-center gap-4 py-4">
+              <BriefcaseBusiness className="h-4 w-4 shrink-0 accent-text" />
+              <div className="min-w-0 flex-1">
+                <span className="block font-mono text-[10px] opacity-60">LINKEDIN</span>
+                <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer" className="break-all text-sm font-semibold hover:accent-text">
+                  linkedin.com/in/rahulvishwakarma78
+                </a>
               </div>
+            </div>
 
-              <div className="flex items-start gap-3.5">
-                <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
-                  <BriefcaseBusiness className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-mono text-slate-400">LINKEDIN</div>
-                  <a
-                    href={PERSONAL_INFO.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-semibold text-cyan-400 hover:underline break-all"
-                  >
-                    linkedin.com/in/rahulvishwakarma78
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
-                  <GitBranch className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-mono text-slate-400">GITHUB</div>
-                  <a
-                    href={PERSONAL_INFO.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-semibold text-cyan-400 hover:underline break-all"
-                  >
-                    github.com/rahul07632
-                  </a>
-                </div>
+            <div className="flex items-center gap-4 py-4">
+              <GitBranch className="h-4 w-4 shrink-0 accent-text" />
+              <div className="min-w-0 flex-1">
+                <span className="block font-mono text-[10px] opacity-60">GITHUB</span>
+                <a href={PERSONAL_INFO.github} target="_blank" rel="noopener noreferrer" className="break-all text-sm font-semibold hover:accent-text">
+                  github.com/rahul07632
+                </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-7">
-          <form
-            onSubmit={handleContactSubmit}
-            noValidate
-            className={`rounded-3xl border p-6 sm:p-8 space-y-5 transition-colors ${isDark
-              ? 'bg-slate-900/90 border-slate-700/90 text-slate-100 shadow-xl shadow-black/30'
-              : 'bg-white border-slate-300 text-slate-900 shadow-sm'
-              }`}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Send a Message
-                </h3>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                  Opens your default email client pre-addressed to{' '}
-                  <span className={isDark ? 'text-cyan-300 font-mono' : 'text-cyan-700 font-mono'}>
-                    {PERSONAL_INFO.email}
-                  </span>
-                </p>
-              </div>
-              <span
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border ${isDark
-                  ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-300'
-                  : 'bg-cyan-50 border-cyan-300 text-cyan-800'
-                  }`}
-              >
-                mailto: Ready
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="contact-name"
-                  className={`block text-xs font-mono uppercase tracking-wider font-semibold mb-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'
-                    }`}
-                >
-                  Your Name <span className="text-cyan-400">*</span>
-                </label>
-                <input
-                  id="contact-name"
-                  name="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => {
-                    setFormData({ ...formData, name: e.target.value });
-                    if (formErrors.name) setFormErrors({ ...formErrors, name: '' });
-                  }}
-                  placeholder="Enter your full name"
-                  style={{ colorScheme: isDark ? 'dark' : 'light' }}
-                  className={`w-full px-4 py-3 rounded-xl border text-sm font-normal outline-none transition-all ${formErrors.name
-                    ? isDark
-                      ? 'bg-slate-950 text-white placeholder:text-slate-400 border-rose-400 ring-2 ring-rose-500/25'
-                      : 'bg-white text-slate-900 placeholder:text-slate-400 border-rose-500 ring-2 ring-rose-500/20'
-                    : isDark
-                      ? 'bg-slate-950 text-white placeholder:text-slate-400 border-slate-700 hover:border-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/25'
-                      : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 border-slate-300 hover:border-slate-400 focus:bg-white focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20'
-                    }`}
-                />
-                {formErrors.name && (
-                  <p
-                    role="alert"
-                    className={`text-xs font-medium mt-1.5 flex items-center gap-1.5 ${isDark ? 'text-rose-300' : 'text-rose-600'
-                      }`}
-                  >
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>{formErrors.name}</span>
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="contact-email"
-                  className={`block text-xs font-mono uppercase tracking-wider font-semibold mb-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'
-                    }`}
-                >
-                  Your Email <span className="text-cyan-400">*</span>
-                </label>
-                <input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => {
-                    setFormData({ ...formData, email: e.target.value });
-                    if (formErrors.email) setFormErrors({ ...formErrors, email: '' });
-                  }}
-                  placeholder="name@company.com"
-                  style={{ colorScheme: isDark ? 'dark' : 'light' }}
-                  className={`w-full px-4 py-3 rounded-xl border text-sm font-normal outline-none transition-all ${formErrors.email
-                    ? isDark
-                      ? 'bg-slate-950 text-white placeholder:text-slate-400 border-rose-400 ring-2 ring-rose-500/25'
-                      : 'bg-white text-slate-900 placeholder:text-slate-400 border-rose-500 ring-2 ring-rose-500/20'
-                    : isDark
-                      ? 'bg-slate-950 text-white placeholder:text-slate-400 border-slate-700 hover:border-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/25'
-                      : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 border-slate-300 hover:border-slate-400 focus:bg-white focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20'
-                    }`}
-                />
-                {formErrors.email && (
-                  <p
-                    role="alert"
-                    className={`text-xs font-medium mt-1.5 flex items-center gap-1.5 ${isDark ? 'text-rose-300' : 'text-rose-600'
-                      }`}
-                  >
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>{formErrors.email}</span>
-                  </p>
-                )}
-              </div>
-            </div>
-
+        <form
+          onSubmit={handleContactSubmit}
+          noValidate
+          className="space-y-5 rounded-3xl surface-box p-6 editorial-reveal sm:p-8 lg:col-span-7"
+        >
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <label
-                htmlFor="contact-subject"
-                className={`block text-xs font-mono uppercase tracking-wider font-semibold mb-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'
-                  }`}
-              >
-                Subject <span className="text-cyan-400">*</span>
+              <h3 className="font-display text-xl font-bold sm:text-2xl">Send a Message</h3>
+              <p className="mt-1 text-xs leading-relaxed opacity-70">
+                Your message will be sent directly to{' '}
+                <span className="font-mono accent-text">{PERSONAL_INFO.email}</span>.
+              </p>
+            </div>
+            <span className="rounded-full border hairline px-3 py-1 font-mono text-[10px] uppercase tracking-wider accent-text">
+              Available for work
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="contact-name" className="mb-1.5 block font-mono text-xs uppercase tracking-wider">
+                Your Name <span className="accent-text">*</span>
               </label>
               <input
-                id="contact-subject"
-                name="subject"
+                id="contact-name"
+                name="name"
                 type="text"
                 required
-                value={formData.subject}
-                onChange={(e) => {
-                  setFormData({ ...formData, subject: e.target.value });
-                  if (formErrors.subject) setFormErrors({ ...formErrors, subject: '' });
-                }}
-                placeholder="Full Stack Developer Role / Interview Invitation"
-                style={{ colorScheme: isDark ? 'dark' : 'light' }}
-                className={`w-full px-4 py-3 rounded-xl border text-sm font-normal outline-none transition-all ${formErrors.subject
-                  ? isDark
-                    ? 'bg-slate-950 text-white placeholder:text-slate-400 border-rose-400 ring-2 ring-rose-500/25'
-                    : 'bg-white text-slate-900 placeholder:text-slate-400 border-rose-500 ring-2 ring-rose-500/20'
-                  : isDark
-                    ? 'bg-slate-950 text-white placeholder:text-slate-400 border-slate-700 hover:border-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/25'
-                    : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 border-slate-300 hover:border-slate-400 focus:bg-white focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20'
-                  }`}
+                value={formData.name}
+                onChange={(event) => updateField('name', event.target.value)}
+                placeholder="Enter your full name"
+                aria-invalid={Boolean(formErrors.name)}
+                aria-describedby={formErrors.name ? 'contact-name-error' : undefined}
+                className={inputClassName(formErrors.name)}
               />
-              {formErrors.subject && (
-                <p
-                  role="alert"
-                  className={`text-xs font-medium mt-1.5 flex items-center gap-1.5 ${isDark ? 'text-rose-300' : 'text-rose-600'
-                    }`}
-                >
-                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                  <span>{formErrors.subject}</span>
-                </p>
-              )}
+              <ContactFieldError id="contact-name-error" message={formErrors.name} />
             </div>
 
             <div>
-              <label
-                htmlFor="contact-message"
-                className={`block text-xs font-mono uppercase tracking-wider font-semibold mb-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'
-                  }`}
-              >
-                Message <span className="text-cyan-400">*</span>
+              <label htmlFor="contact-email" className="mb-1.5 block font-mono text-xs uppercase tracking-wider">
+                Your Email <span className="accent-text">*</span>
               </label>
-              <textarea
-                id="contact-message"
-                name="message"
-                rows="4"
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
                 required
-                value={formData.message}
-                onChange={(e) => {
-                  setFormData({ ...formData, message: e.target.value });
-                  if (formErrors.message) setFormErrors({ ...formErrors, message: '' });
-                }}
-                placeholder="Hello Rahul, we reviewed your projects and would love to schedule an interview..."
-                style={{ colorScheme: isDark ? 'dark' : 'light' }}
-                className={`w-full px-4 py-3 rounded-xl border text-sm font-normal outline-none transition-all resize-y ${formErrors.message
-                  ? isDark
-                    ? 'bg-slate-950 text-white placeholder:text-slate-400 border-rose-400 ring-2 ring-rose-500/25'
-                    : 'bg-white text-slate-900 placeholder:text-slate-400 border-rose-500 ring-2 ring-rose-500/20'
-                  : isDark
-                    ? 'bg-slate-950 text-white placeholder:text-slate-400 border-slate-700 hover:border-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/25'
-                    : 'bg-slate-50 text-slate-900 placeholder:text-slate-400 border-slate-300 hover:border-slate-400 focus:bg-white focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20'
-                  }`}
+                value={formData.email}
+                onChange={(event) => updateField('email', event.target.value)}
+                placeholder="name@company.com"
+                aria-invalid={Boolean(formErrors.email)}
+                aria-describedby={formErrors.email ? 'contact-email-error' : undefined}
+                className={inputClassName(formErrors.email)}
               />
-              {formErrors.message && (
-                <p
-                  role="alert"
-                  className={`text-xs font-medium mt-1.5 flex items-center gap-1.5 ${isDark ? 'text-rose-300' : 'text-rose-600'
-                    }`}
-                >
-                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                  <span>{formErrors.message}</span>
-                </p>
+              <ContactFieldError id="contact-email-error" message={formErrors.email} />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="contact-subject" className="mb-1.5 block font-mono text-xs uppercase tracking-wider">
+              Subject <span className="accent-text">*</span>
+            </label>
+            <input
+              id="contact-subject"
+              name="subject"
+              type="text"
+              required
+              value={formData.subject}
+              onChange={(event) => updateField('subject', event.target.value)}
+              placeholder="Full Stack Developer Role / Interview Invitation"
+              aria-invalid={Boolean(formErrors.subject)}
+              aria-describedby={formErrors.subject ? 'contact-subject-error' : undefined}
+              className={inputClassName(formErrors.subject)}
+            />
+            <ContactFieldError id="contact-subject-error" message={formErrors.subject} />
+          </div>
+
+          <div>
+            <label htmlFor="contact-message" className="mb-1.5 block font-mono text-xs uppercase tracking-wider">
+              Message <span className="accent-text">*</span>
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="4"
+              required
+              value={formData.message}
+              onChange={(event) => updateField('message', event.target.value)}
+              placeholder="Hello Rahul, we reviewed your projects and would love to schedule an interview..."
+              aria-invalid={Boolean(formErrors.message)}
+              aria-describedby={formErrors.message ? 'contact-message-error' : undefined}
+              className={`${inputClassName(formErrors.message)} resize-y`}
+            />
+            <ContactFieldError id="contact-message-error" message={formErrors.message} />
+          </div>
+
+          {formStatus.type !== 'idle' && (
+            <div
+              role="status"
+              className={`space-y-3 rounded-2xl border p-4 text-xs leading-relaxed ${
+                formStatus.type === 'error'
+                  ? 'border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300'
+                  : formStatus.type === 'success'
+                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                    : 'border-[var(--accent)]/40 bg-[var(--accent)]/10'
+              }`}
+            >
+              <div className="flex items-start gap-2.5">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                <span className="font-medium">{formStatus.message}</span>
+              </div>
+              {formStatus.mailtoUrl && (
+                <div className="flex flex-wrap items-center gap-2 border-t border-current/20 pt-2">
+                  <a
+                    href={formStatus.mailtoUrl}
+                    className="inline-flex items-center gap-1.5 rounded-full accent-bg px-3 py-1.5 text-xs font-semibold"
+                  >
+                    <Mail className="h-3.5 w-3.5" />
+                    <span>Retry email link</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyText(
+                        'formatted-email',
+                        `To: ${PERSONAL_INFO.email}\nSubject: [Portfolio Contact] ${formData.subject.trim()} — from ${formData.name.trim()}\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}`
+                      )
+                    }
+                    className="inline-flex items-center gap-1.5 rounded-full border hairline px-3 py-1.5 text-xs font-semibold"
+                  >
+                    {copiedKey === 'formatted-email' ? (
+                      <>
+                        <Check className="h-3.5 w-3.5" />
+                        <span>Copied full message</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Copy pre-filled message</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
+          )}
 
-            {formStatus.type !== 'idle' && (
-              <div
-                role="status"
-                className={`p-4 rounded-2xl border text-xs space-y-3 leading-relaxed ${formStatus.type === 'error'
-                  ? isDark
-                    ? 'bg-rose-950/70 border-rose-500/60 text-rose-200'
-                    : 'bg-rose-50 border-rose-300 text-rose-800'
-                  : formStatus.type === 'success'
-                    ? isDark
-                      ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-100'
-                      : 'bg-emerald-50 border-emerald-300 text-emerald-800'
-                    : isDark
-                      ? 'bg-cyan-950/60 border-cyan-500/50 text-slate-100'
-                      : 'bg-cyan-50 border-cyan-300 text-slate-800'
-                  }`}
-              >
-                <div className="flex items-start gap-2.5">
-                  <AlertCircle
-                    className={`w-4 h-4 shrink-0 mt-0.5 ${formStatus.type === 'error'
-                      ? isDark
-                        ? 'text-rose-400'
-                        : 'text-rose-600'
-                      : formStatus.type === 'success'
-                        ? isDark
-                          ? 'text-emerald-400'
-                          : 'text-emerald-600'
-                        : isDark
-                          ? 'text-cyan-400'
-                          : 'text-cyan-700'
-                      }`}
-                  />
-                  <span className="font-medium">{formStatus.message}</span>
-                </div>
-
-                {formStatus.mailtoUrl && (
-                  <div className="pt-2 border-t border-cyan-500/30 flex flex-wrap items-center gap-2">
-                    <a
-                      href={formStatus.mailtoUrl}
-                      className={`px-3 py-1.5 rounded-lg font-semibold text-xs inline-flex items-center gap-1.5 ${isDark
-                        ? 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
-                        : 'bg-cyan-600 text-white hover:bg-cyan-700'
-                        }`}
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      <span>Retry mailto: Link</span>
-                    </a>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        copyText(
-                          'formatted-email',
-                          `To: ${PERSONAL_INFO.email}\nSubject: [Portfolio Contact] ${formData.subject.trim()} — from ${formData.name.trim()}\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}`
-                        )
-                      }
-                      className={`px-3 py-1.5 rounded-lg font-semibold text-xs border inline-flex items-center gap-1.5 ${isDark
-                        ? 'bg-slate-900 border-slate-700 text-slate-100 hover:border-cyan-400'
-                        : 'bg-white border-slate-300 text-slate-800 hover:border-cyan-600'
-                        }`}
-                    >
-                      {copiedKey === 'formatted-email' ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Copied Full Message!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy Pre-Filled Message</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <button
-                type="submit"
-                className="px-6 py-3.5 rounded-2xl font-bold text-sm bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-600 text-slate-950 shadow-lg shadow-cyan-500/25 hover:brightness-110 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 flex items-center gap-2 transition"
-              >
-                <Send className="w-4 h-4" />
-                <span>Send Message</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => copyText('direct-email-btn', PERSONAL_INFO.email)}
-                className={`px-5 py-3.5 rounded-2xl font-semibold text-xs border flex items-center gap-2 transition ${isDark
-                  ? 'bg-slate-950 border-slate-700 text-slate-100 hover:border-cyan-400 hover:text-cyan-300'
-                  : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'
-                  }`}
-              >
-                {copiedKey === 'direct-email-btn' ? (
-                  <>
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    <span>Email Copied: {PERSONAL_INFO.email}</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4 text-cyan-400" />
-                    <span>Copy Email Address</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              type="submit"
+              className="inline-flex items-center gap-2 rounded-full accent-bg px-6 py-3.5 font-display text-xs font-bold uppercase tracking-wider transition-opacity hover:opacity-90"
+            >
+              <Send className="h-4 w-4" />
+              <span>Send Message</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => copyText('direct-email-btn', PERSONAL_INFO.email)}
+              className="inline-flex items-center gap-2 rounded-full border hairline px-5 py-3.5 font-mono text-xs transition-colors hover:border-[var(--accent)] hover:accent-text"
+            >
+              {copiedKey === 'direct-email-btn' ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  <span>Email copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" />
+                  <span>Copy email address</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
     </section>
   );
