@@ -12,11 +12,17 @@ import {
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
-const EMAILJS_TARGET_EMAIL = import.meta.env.VITE_TO_EMAIL || PERSONAL_INFO.email;
+const getEnvValue = (key) => String(import.meta.env[key] ?? '').trim();
+
+const EMAILJS_SERVICE_ID = getEnvValue('VITE_EMAILJS_SERVICE_ID');
+const EMAILJS_TEMPLATE_ID = getEnvValue('VITE_EMAILJS_TEMPLATE_ID');
+const EMAILJS_PUBLIC_KEY = getEnvValue('VITE_EMAILJS_PUBLIC_KEY');
+const EMAILJS_TARGET_EMAIL = getEnvValue('VITE_TO_EMAIL') || PERSONAL_INFO.email;
 const IS_EMAILJS_READY = Boolean(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY);
+
+if (import.meta.env.DEV && !IS_EMAILJS_READY) {
+  console.warn('EmailJS not ready. Check .env values for VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY.');
+}
 
 export default function Contact({ isDark }) {
   const [formData, setFormData] = useState({
@@ -95,6 +101,7 @@ export default function Contact({ isDark }) {
     )}&body=${encodeURIComponent(emailBody)}`;
   };
 
+
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ type: 'idle', message: '', mailtoUrl: '' });
@@ -137,33 +144,28 @@ export default function Contact({ isDark }) {
         return;
       }
 
-      const link = document.createElement('a');
-      link.href = mailtoUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      console.warn('EmailJS fallback triggered. Missing or invalid env values.', {
+        serviceId: EMAILJS_SERVICE_ID,
+        templateId: EMAILJS_TEMPLATE_ID,
+        publicKey: EMAILJS_PUBLIC_KEY ? 'present' : 'missing',
+        targetEmail: EMAILJS_TARGET_EMAIL
+      });
+
+      window.location.href = mailtoUrl;
 
       setFormStatus({
         type: 'info',
-        message: `Opening your default email application pre-addressed to ${PERSONAL_INFO.email}. Please click "Send" inside your email app to complete delivery. If no email application is configured on your device, use the buttons below to copy the pre-filled email or address.`,
+        message: `Your default mail app is opening with the message pre-filled for ${PERSONAL_INFO.email}. Please review and click Send to complete delivery.`,
         mailtoUrl
       });
     } catch (error) {
       console.error('Contact form submission failed:', error);
 
-      try {
-        const link = document.createElement('a');
-        link.href = mailtoUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch {
-        window.location.href = mailtoUrl;
-      }
+      window.location.href = mailtoUrl;
 
       setFormStatus({
         type: 'info',
-        message: `The direct email app fallback was opened. Please send the message from your email client to complete delivery to ${PERSONAL_INFO.email}.`,
+        message: `Your default mail app is opening with the message pre-filled for ${PERSONAL_INFO.email}. Please review and click Send to complete delivery.`,
         mailtoUrl
       });
     }

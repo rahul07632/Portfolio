@@ -1,51 +1,16 @@
-import React from 'react';
-import { GitBranch, BriefcaseBusiness } from 'lucide-react';
-import { PERSONAL_INFO } from '../data/portfolioData';
-
-export default function Footer({ isDark }) {
+export default function Footer() {
   return (
-    <footer
-      className={`relative z-10 border-t py-10 ${isDark ? 'border-slate-900 bg-[#03050e]' : 'border-slate-200 bg-slate-100'
-        }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-violet-600 flex items-center justify-center text-white font-bold text-xs">
-            RV
-          </div>
-          <div className="text-xs">
-            <div className="font-semibold">{PERSONAL_INFO.name}</div>
-            <div className={isDark ? 'text-slate-400' : 'text-slate-500'}>
-              Full Stack Developer • B.Tech CSE (2025)
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <a
-            href={PERSONAL_INFO.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-mono hover:text-cyan-400 flex items-center gap-1.5"
-          >
-            <GitBranch className="w-4 h-4" />
-            <span>GitHub</span>
-          </a>
-          <a
-            href={PERSONAL_INFO.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-mono hover:text-cyan-400 flex items-center gap-1.5"
-          >
-            <BriefcaseBusiness className="w-4 h-4" />
-            <span>LinkedIn</span>
-          </a>
-        </div>
-
-        <div className="text-xs text-slate-500">
-          © {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.
-        </div>
+    <>
+<footer className="border-t hairline py-8">
+    <div className="max-w-[1400px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs opacity-75">
+      <div>© 2026 RAHUL VISHWAKARMA — FULL STACK DEVELOPER</div>
+      <div className="flex items-center gap-5">
+        <a href="https://github.com/rahul07632" target="_blank" rel="noopener noreferrer" className="hover:accent-text">GitHub</a>
+        <a href="https://www.linkedin.com/in/rahulvishwakarma78/" target="_blank" rel="noopener noreferrer" className="hover:accent-text">LinkedIn</a>
+        <a href="#hero" className="hover:accent-text">Back to Top ↑</a>
       </div>
-    </footer>
+    </div>
+  </footer>
+    </>
   );
 }

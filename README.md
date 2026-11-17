@@ -1,17 +1,32 @@
-# Rahul Vishwakarma - Personal Portfolio
+# Rahul Vishwakarma — React Portfolio
 
-A modern, responsive, and modular personal portfolio built with **React**, **Vite**, and **Tailwind CSS**.
+React + Vite component-based portfolio. The existing visual design and portfolio sections are retained.
 
-## Getting Started (Run Locally)
+## Run locally
 
-1. Extract this zip folder.
-2. Open terminal in the project directory (`rahul-portfolio`).
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
-5. Open your browser and go to `http://localhost:5173`.
+```bash
+npm install
+npm run dev
+```
+
+## Production build
+
+```bash
+npm run build
+npm run preview
+```
+
+## Updated interaction fixes
+- Larger, high-contrast yellow custom cursor with smoother pointer tracking and a clear hover ring.
+- Functional responsive mobile menu with all section links, close button, Escape-key support, and background scroll lock.
+- Faster preloader exit and quicker scroll-reveal animations.
+- Reduced-motion accessibility support.
+
+## Project structure
+- `src/components/` — reusable React UI components.
+- `src/sections/` — portfolio sections.
+- `src/App.jsx` — app composition and mobile menu state.
+- `src/styles.css` — global styling and interaction states.
+- `public/portfolio-interactions.js` — existing portfolio behaviours (theme, clock, Three.js, project interactions, resume, contact).
+
+Tailwind CDN, Three.js, Lucide icons, and Google Fonts are loaded from `index.html`.

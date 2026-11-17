@@ -1,12 +1,19 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rahul Vishwakarma | Full-Stack Web Developer</title>
+    <meta name="description" content="Rahul Vishwakarma — Full Stack Developer." />
+    <title>Rahul Vishwakarma — Full Stack Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+    <script>window.tailwind = window.tailwind || {}; tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { display: ['"Syne"','sans-serif'], serif: ['"Instrument Serif"','serif'], sans: ['"Plus Jakarta Sans"','sans-serif'], mono: ['"JetBrains Mono"','monospace'] }, colors: { ink:'#09090B', paper:'#F4F3EF', volt:'#E2FF32', vermilion:'#D94E1F' } } } };</script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   </head>
-  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-blue-500 selection:text-white">
+  <body class="antialiased selection:bg-volt selection:text-ink">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

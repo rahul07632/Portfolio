@@ -1,0 +1,235 @@
+:root {
+  --bg: #F4F3EF;
+  --surface: #EAE8E1;
+  --text: #0F0F12;
+  --muted: #52525B;
+  --border: rgba(15, 15, 18, 0.14);
+  --accent: #D94E1F;
+  --accent-fg: #FFFFFF;
+}
+
+html.dark {
+  --bg: #09090B;
+  --surface: #121216;
+  --text: #F4F4F5;
+  --muted: #A1A1AA;
+  --border: rgba(255, 255, 255, 0.12);
+  --accent: #E2FF32;
+  --accent-fg: #09090B;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.hairline {
+  border-color: var(--border);
+}
+
+.surface-box {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.accent-bg {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.accent-text {
+  color: var(--accent);
+}
+
+.case-browser-shell {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(15, 15, 18, 0.06);
+}
+
+.case-browser-header {
+  background: rgba(15, 15, 18, 0.04);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+
+html.dark .case-browser-header {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.case-sandbox-input,
+.case-sandbox-list-item,
+.case-sandbox-card {
+  border-color: var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.case-sandbox-card:hover {
+  border-color: var(--accent);
+}
+
+.case-sandbox-input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.case-sandbox-muted {
+  color: var(--muted);
+}
+
+/* Editorial Marquee */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Custom Precision Cursor (Desktop fine pointer only) */
+@media (pointer: fine) {
+  .agency-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #09090B;
+    border-radius: 9999px;
+    background: #E2FF32;
+    box-shadow: 0 0 0 2px rgba(226, 255, 50, 0.28), 0 2px 12px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 99999;
+    opacity: 0;
+    will-change: transform;
+    transition: width 0.16s ease, height 0.16s ease, opacity 0.12s ease, background-color 0.2s ease;
+  }
+
+  .agency-cursor.is-visible {
+    opacity: 1;
+  }
+
+  .agency-cursor.is-hovering {
+    width: 38px;
+    height: 38px;
+    background: rgba(226, 255, 50, 0.22);
+    border-color: #E2FF32;
+    box-shadow: 0 0 0 2px rgba(226, 255, 50, 0.5), 0 0 18px rgba(226, 255, 50, 0.22);
+  }
+}
+
+@media (pointer: coarse) {
+  .agency-cursor {
+    display: none !important;
+  }
+}
+
+/* Fast, subtle reveal animation */
+.editorial-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1), transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #resumeSheet,
+  #resumeSheet * {
+    visibility: visible;
+  }
+
+  #resumeSheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
+
+/* Responsive fullscreen navigation */
+.mobile-menu {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: var(--bg);
+  color: var(--text);
+  transform: translateY(-8px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+}
+
+.mobile-menu.is-open {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .editorial-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
