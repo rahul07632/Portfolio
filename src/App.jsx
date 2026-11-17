@@ -11,7 +11,7 @@ import Projects from "./sections/Projects";
 import TechStack from "./sections/TechStack";
 import About from "./sections/About";
 import Education from "./sections/Education";
-import Contact from "./sections/Contact";
+import Contact from "./components/Contact";
 import "./styles.css";
 
 export default function App() {
