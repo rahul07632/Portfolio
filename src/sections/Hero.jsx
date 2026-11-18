@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Hero() {
   return (
     <>
@@ -27,19 +29,19 @@ export default function Hero() {
 
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <a href="#work" className="magnetic-el inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full accent-bg font-display font-bold text-xs sm:text-sm uppercase tracking-wider hover:opacity-90 transition-all">
+              <Link to="/work" className="magnetic-el inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full accent-bg font-display font-bold text-xs sm:text-sm uppercase tracking-wider hover:opacity-90 transition-all">
                 <span>Explore Case Studies</span>
                 <i data-lucide="arrow-down-right" className="w-4 h-4"></i>
-              </a>
+              </Link>
 
               <button id="heroResumeBtn" type="button" className="magnetic-el inline-flex items-center gap-2 px-5 py-3.5 rounded-full border hairline font-mono text-xs uppercase tracking-wider hover:border-[var(--accent)] transition-all">
                 <i data-lucide="file-text" className="w-4 h-4 accent-text"></i>
                 <span>View &amp; Download Resume</span>
               </button>
 
-              <a href="#contact" className="magnetic-el inline-flex items-center gap-2 px-5 py-3.5 rounded-full border hairline font-mono text-xs uppercase tracking-wider hover:border-[var(--accent)] transition-all">
+              <Link to="/contact" className="magnetic-el inline-flex items-center gap-2 px-5 py-3.5 rounded-full border hairline font-mono text-xs uppercase tracking-wider hover:border-[var(--accent)] transition-all">
                 <span>Contact</span>
-              </a>
+              </Link>
             </div>
 
 

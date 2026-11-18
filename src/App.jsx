@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import CustomCursor from "./components/CustomCursor";
 import Preloader from "./components/Preloader";
 import ToastStack from "./components/ToastStack";
@@ -12,7 +13,48 @@ import TechStack from "./sections/TechStack";
 import About from "./sections/About";
 import Education from "./sections/Education";
 import Contact from "./components/Contact";
+import Seo from "./components/Seo";
 import "./styles.css";
+
+function ScrollForRoute() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const sectionIds = {
+      "/": "hero",
+      "/work": "work",
+      "/stack": "stack",
+      "/about": "about",
+      "/education": "education",
+      "/contact": "contact",
+    };
+    const section = document.getElementById(sectionIds[pathname] || "hero");
+
+    if (!section) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [pathname]);
+
+  return null;
+}
+
+function PortfolioPage() {
+  return (
+    <>
+      <Hero />
+      <Projects />
+      <TechStack />
+      <About />
+      <Education />
+      <Contact />
+    </>
+  );
+}
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -112,18 +154,23 @@ export default function App() {
 
   return (
     <>
+      <ScrollForRoute />
+      <Seo />
       <CustomCursor />
       <Preloader />
       <ToastStack />
       <Navbar isMenuOpen={menuOpen} onMenuOpen={() => setMenuOpen((open) => !open)} />
       <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <main className="pt-16">
-        <Hero />
-        <Projects />
-        <TechStack />
-        <About />
-        <Education />
-        <Contact />
+        <Routes>
+          <Route path="/" element={<PortfolioPage />} />
+          <Route path="/work" element={<PortfolioPage />} />
+          <Route path="/stack" element={<PortfolioPage />} />
+          <Route path="/about" element={<PortfolioPage />} />
+          <Route path="/education" element={<PortfolioPage />} />
+          <Route path="/contact" element={<PortfolioPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
       <Footer />
       <ResumeModal />

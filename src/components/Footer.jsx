@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <>
@@ -7,7 +9,7 @@ export default function Footer() {
       <div className="flex items-center gap-5">
         <a href="https://github.com/rahul07632" target="_blank" rel="noopener noreferrer" className="hover:accent-text">GitHub</a>
         <a href="https://www.linkedin.com/in/rahulvishwakarma78/" target="_blank" rel="noopener noreferrer" className="hover:accent-text">LinkedIn</a>
-        <a href="#hero" className="hover:accent-text">Back to Top ↑</a>
+        <Link to="/" className="hover:accent-text">Back to Top ↑</Link>
       </div>
     </div>
   </footer>

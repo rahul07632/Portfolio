@@ -1,24 +1,34 @@
+import { NavLink, Link } from "react-router-dom";
+
 export default function Navbar({ onMenuOpen, isMenuOpen }) {
+  const navItems = [
+    ["/work", "01", "Case Studies"],
+    ["/stack", "02", "Tech Stack"],
+    ["/about", "03", "Profile"],
+    ["/education", "04", "Education"],
+    ["/contact", "05", "Contact"],
+  ];
+
   return (
     <>
 <header className="fixed top-0 left-0 right-0 z-50 border-b hairline backdrop-blur-md bg-[var(--bg)]/85">
     <div className="max-w-[1400px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-4">
       
-      <a href="#hero" className="flex items-center gap-3 group">
+      <Link to="/" className="flex items-center gap-3 group">
         <span className="w-8 h-8 rounded-full accent-bg flex items-center justify-center font-display font-bold text-xs tracking-tighter group-hover:scale-105 transition-transform">RV</span>
         <div className="leading-tight">
           <span className="font-display font-bold text-sm tracking-tight block">RAHUL VISHWAKARMA</span>
           <span className="font-mono text-[10px] opacity-65 block">FULL STACK DEVELOPER</span>
         </div>
-      </a>
+      </Link>
 
       
       <nav aria-label="Primary Navigation" className="hidden lg:flex items-center gap-7 font-mono text-xs uppercase tracking-wider">
-        <a href="#work" className="hover:accent-text transition-colors"><span className="opacity-45 mr-1">01</span>Case Studies</a>
-        <a href="#stack" className="hover:accent-text transition-colors"><span className="opacity-45 mr-1">02</span>Tech Stack</a>
-        <a href="#about" className="hover:accent-text transition-colors"><span className="opacity-45 mr-1">03</span>Profile</a>
-        <a href="#education" className="hover:accent-text transition-colors"><span className="opacity-45 mr-1">04</span>Education</a>
-        <a href="#contact" className="hover:accent-text transition-colors"><span className="opacity-45 mr-1">05</span>Contact</a>
+        {navItems.map(([to, number, label]) => (
+          <NavLink key={to} to={to} className={({ isActive }) => `hover:accent-text transition-colors ${isActive ? "accent-text" : ""}`}>
+            <span className="opacity-45 mr-1">{number}</span>{label}
+          </NavLink>
+        ))}
       </nav>
 
       

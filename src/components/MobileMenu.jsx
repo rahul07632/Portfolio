@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom";
+
 const items = [
-  ["01", "Case Studies", "#work"],
-  ["02", "Tech Stack", "#stack"],
-  ["03", "Profile & Approach", "#about"],
-  ["04", "Education", "#education"],
-  ["05", "Contact", "#contact"],
+  ["01", "Case Studies", "/work"],
+  ["02", "Tech Stack", "/stack"],
+  ["03", "Profile & Approach", "/about"],
+  ["04", "Education", "/education"],
+  ["05", "Contact", "/contact"],
 ];
 
 export default function MobileMenu({ isOpen, onClose }) {
@@ -23,16 +25,16 @@ export default function MobileMenu({ isOpen, onClose }) {
 
       <nav aria-label="Mobile Navigation" className="mx-auto flex w-full max-w-xl flex-col gap-3 py-7">
         {items.map(([number, label, href]) => (
-          <a
+          <Link
             key={href}
-            href={href}
+            to={href}
             onClick={onClose}
             tabIndex={isOpen ? 0 : -1}
             className="overlay-link flex items-center gap-3 rounded-2xl border border-transparent px-2 py-3 font-display font-bold text-[1.75rem] leading-none tracking-[-0.05em] transition-all duration-200 hover:border-[var(--border)] hover:bg-[var(--surface)] hover:text-[var(--accent)]"
           >
             <span className="font-mono text-[10px] uppercase tracking-[0.26em] opacity-65">{number}</span>
             <span>{label}</span>
-          </a>
+          </Link>
         ))}
       </nav>
 
