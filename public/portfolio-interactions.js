@@ -88,6 +88,18 @@
   if (savedTheme === 'light') htmlEl.classList.remove('dark');
   else htmlEl.classList.add('dark');
 
+  function updateFavicon(isDark) {
+    const icon = document.querySelector('link[rel="icon"]');
+    if (!icon) return;
+
+    const background = isDark ? '#09090b' : '#f4f3ef';
+    const foreground = isDark ? '#e2ff32' : '#d94e1f';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="16" fill="${background}"/><text x="32" y="47" fill="${foreground}" font-family="Arial,Helvetica,sans-serif" font-size="40" font-weight="900" letter-spacing="-4" text-anchor="middle">RV</text></svg>`;
+    icon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  }
+
+  updateFavicon(htmlEl.classList.contains('dark'));
+
   const themeBtn = document.getElementById('themeBtn');
   if (themeBtn) {
     let themeTransitionTimer;
@@ -96,6 +108,7 @@
     const applyTheme = function () {
       const isDark = htmlEl.classList.toggle('dark');
       safeSet('rv_rebuilt_theme', isDark ? 'dark' : 'light');
+      updateFavicon(isDark);
       updateThreeColors(isDark);
       toast(isDark ? 'Obsidian Dark Mode active' : 'Editorial Light Mode active');
     };

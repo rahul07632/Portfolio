@@ -1,6 +1,7 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 
 export default function Navbar({ onMenuOpen, isMenuOpen }) {
+  const { pathname } = useLocation();
   const navItems = [
     ["/work", "01", "Case Studies"],
     ["/stack", "02", "Tech Stack"],
@@ -14,7 +15,16 @@ export default function Navbar({ onMenuOpen, isMenuOpen }) {
 <header className="fixed top-0 left-0 right-0 z-50 border-b hairline backdrop-blur-md bg-[var(--bg)]/85">
     <div className="max-w-[1400px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-4">
       
-      <Link to="/" className="flex items-center gap-3 group">
+      <Link
+        to="/"
+        onClick={(event) => {
+          if (pathname === "/") {
+            event.preventDefault();
+            document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
+        className="flex items-center gap-3 group"
+      >
         <span className="w-8 h-8 rounded-full accent-bg flex items-center justify-center font-display font-bold text-xs tracking-tighter group-hover:scale-105 transition-transform">RV</span>
         <div className="leading-tight">
           <span className="font-display font-bold text-sm tracking-tight block">RAHUL VISHWAKARMA</span>
