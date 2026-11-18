@@ -3,6 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      try {
+        if (JSON.parse(localStorage.getItem('rv_rebuilt_theme')) === 'light') {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch {
+        // Keep the default dark theme when local storage is unavailable.
+      }
+    </script>
     <meta name="description" content="Rahul Vishwakarma — Full Stack Developer." />
     <title>Rahul Vishwakarma — Full Stack Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

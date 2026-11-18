@@ -53,13 +53,19 @@
   // 1. Preloader Curtain
   const curtain = document.getElementById('curtainLoader');
   const skipBtn = document.getElementById('skipLoaderBtn');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const curtainExitDuration = prefersReducedMotion ? 0 : 1400;
+  let curtainLifted = false;
+  let autoLiftTimer;
   function liftCurtain() {
-    if (!curtain) return;
+    if (!curtain || curtainLifted) return;
+    curtainLifted = true;
+    clearTimeout(autoLiftTimer);
     curtain.style.transform = 'translateY(-100%)';
-    setTimeout(function () { curtain.style.display = 'none'; }, 450);
+    setTimeout(function () { curtain.style.display = 'none'; }, curtainExitDuration);
   }
   if (skipBtn) skipBtn.addEventListener('click', liftCurtain);
-  setTimeout(liftCurtain, 180);
+  autoLiftTimer = setTimeout(liftCurtain, prefersReducedMotion ? 0 : 850);
 
   // 2. Live IST Clock
   const clockEl = document.getElementById('liveClock');
@@ -84,11 +90,37 @@
 
   const themeBtn = document.getElementById('themeBtn');
   if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
+    let themeTransitionTimer;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const themeTransitionDuration = prefersReducedMotion ? 0 : 1800;
+    const applyTheme = function () {
       const isDark = htmlEl.classList.toggle('dark');
       safeSet('rv_rebuilt_theme', isDark ? 'dark' : 'light');
       updateThreeColors(isDark);
       toast(isDark ? 'Obsidian Dark Mode active' : 'Editorial Light Mode active');
+    };
+
+    themeBtn.addEventListener('click', function () {
+      if (prefersReducedMotion) {
+        applyTheme();
+        return;
+      }
+
+      if (typeof document.startViewTransition === 'function') {
+        const bounds = themeBtn.getBoundingClientRect();
+        htmlEl.style.setProperty('--theme-origin-x', (bounds.left + bounds.width / 2) + 'px');
+        htmlEl.style.setProperty('--theme-origin-y', (bounds.top + bounds.height / 2) + 'px');
+        if (document.activeViewTransition) document.activeViewTransition.skipTransition();
+        document.startViewTransition(applyTheme);
+        return;
+      }
+
+      htmlEl.classList.add('theme-transitioning');
+      window.clearTimeout(themeTransitionTimer);
+      themeTransitionTimer = window.setTimeout(function () {
+        htmlEl.classList.remove('theme-transitioning');
+      }, themeTransitionDuration);
+      applyTheme();
     });
   }
 

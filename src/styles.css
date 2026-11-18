@@ -30,6 +30,120 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke, transform, opacity, width, height, filter !important;
+  transition-duration: 1800ms !important;
+  transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1) !important;
+}
+
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: theme-reveal 1800ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-origin-x, 50vw) var(--theme-origin-y, 50vh));
+  }
+
+  to {
+    clip-path: circle(150vmax at var(--theme-origin-x, 50vw) var(--theme-origin-y, 50vh));
+  }
+}
+
+.portfolio-preloader {
+  background: var(--bg);
+  color: var(--text);
+  transition: transform 1400ms cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+
+.preloader-skip {
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.preloader-skip:hover {
+  color: var(--accent);
+}
+
+.preloader-content {
+  position: relative;
+  isolation: isolate;
+}
+
+.preloader-title {
+  animation: preloader-title-in 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.preloader-title-accent {
+  display: inline-block;
+  animation: preloader-title-in 1100ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.preloader-code-mark {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: -1;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(6rem, 18vw, 10rem);
+  font-weight: 600;
+  line-height: 1;
+  opacity: 0.07;
+  pointer-events: none;
+  transform: translateY(-50%);
+  animation: preloader-mark-float 6s ease-in-out infinite;
+}
+
+.preloader-progress {
+  background: var(--border);
+}
+
+.preloader-progress-fill {
+  background: var(--accent);
+  animation: preloader-progress-in 2.25s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes preloader-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes preloader-progress-in {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes preloader-mark-float {
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(-5deg);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 8px)) rotate(0deg);
+  }
+}
+
 .hairline {
   border-color: var(--border);
 }
@@ -231,5 +345,19 @@ html.dark .case-browser-header {
   .editorial-reveal {
     opacity: 1;
     transform: none;
+  }
+
+  .preloader-title {
+    animation: none;
+  }
+
+  .preloader-title-accent,
+  .preloader-code-mark {
+    animation: none;
+  }
+
+  .preloader-progress-fill {
+    animation: none;
+    transform: scaleX(1);
   }
 }

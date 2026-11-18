@@ -118,13 +118,30 @@ export default function Contact() {
         return;
       }
 
+      const sentAt = new Date();
+      const formattedSentAt = sentAt.toLocaleString('en-IN', {
+        dateStyle: 'full',
+        timeStyle: 'long'
+      });
+
       const templateParams = {
         from_name: formData.name.trim(),
         from_email: formData.email.trim(),
         subject: formData.subject.trim(),
-        message: formData.message.trim(),
+        message: `${formData.message.trim()}\n\n---\nSent at: ${formattedSentAt}`,
         to_email: EMAILJS_TARGET_EMAIL,
-        to_name: 'Rahul Vishwakarma'
+        to_name: 'Rahul Vishwakarma',
+        sent_at: formattedSentAt,
+        sent_iso: sentAt.toISOString(),
+        sent_date: sentAt.toLocaleDateString('en-IN', {
+          dateStyle: 'full'
+        }),
+        time: sentAt.toLocaleTimeString('en-IN', {
+          timeStyle: 'long'
+        }),
+        sent_time: sentAt.toLocaleTimeString('en-IN', {
+          timeStyle: 'long'
+        })
       };
 
       await emailjs.send(
