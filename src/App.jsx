@@ -16,6 +16,7 @@ import Projects from './sections/Projects';
 import TechStack from './sections/TechStack';
 import Contact from './sections/Contact';
 import { SCENES } from './data/portfolioData';
+import { playThemeSound } from './utils/themeAudio';
 import './styles.css';
 
 export default function App() {
@@ -98,9 +99,10 @@ export default function App() {
     }, 3000);
   }, []);
 
-  // Theme toggle with circular clip-path wipe animation
+  // Theme toggle with circular clip-path wipe animation & theme audio feedback
   const handleToggleTheme = (e) => {
     const next = theme === 'dark' ? 'light' : 'dark';
+    playThemeSound(next);
     const wipe = wipeRef.current;
     if (wipe) {
       const xPct = e?.clientX ? Math.round((e.clientX / window.innerWidth) * 100) : 50;
