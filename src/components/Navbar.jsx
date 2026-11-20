@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, Sun, Moon, FileText, Menu } from 'lucide-react';
+import { Compass, Sun, Moon, FileText, Menu, Volume2, VolumeX } from 'lucide-react';
 import MagneticButton from './MagneticButton';
 import Logo from './Logo';
 
@@ -11,7 +11,9 @@ export default function Navbar({
   onToggleTour,
   onStopTour,
   onOpenResume,
-  onOpenMobileMenu
+  onOpenMobileMenu,
+  isSoundPlaying,
+  onToggleSound
 }) {
   const location = useLocation();
   const currentPath = location.pathname.toLowerCase();
@@ -94,6 +96,41 @@ export default function Navbar({
               style={isTouring ? {} : { color: 'var(--accent)' }}
             />
             <span>{isTouring ? 'Stop Tour' : 'Auto Tour'}</span>
+          </button>
+
+          {/* Background Lo-Fi Music Toggle */}
+          <button
+            id="ambientSoundBtn"
+            type="button"
+            title={isSoundPlaying ? 'Pause background music' : 'Play theme background music'}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleSound();
+            }}
+            className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono border transition-all ${
+              isSoundPlaying ? 'border-[var(--accent)] font-semibold shadow-sm' : 'hover-lift'
+            }`}
+            style={{
+              borderColor: isSoundPlaying ? 'var(--accent)' : 'var(--border)',
+              background: 'var(--bg-elevated)',
+              color: isSoundPlaying ? 'var(--accent)' : 'var(--text-muted)'
+            }}
+          >
+            {isSoundPlaying ? (
+              <>
+                <span className="flex items-end gap-0.5 h-3.5" aria-hidden="true">
+                  <span className="w-0.5 h-2 bg-current rounded-full animate-pulse" />
+                  <span className="w-0.5 h-3.5 bg-current rounded-full animate-pulse delay-75" />
+                  <span className="w-0.5 h-1.5 bg-current rounded-full animate-pulse delay-150" />
+                </span>
+                <span>Sound</span>
+              </>
+            ) : (
+              <>
+                <VolumeX className="w-3.5 h-3.5 opacity-70" />
+                <span>Muted</span>
+              </>
+            )}
           </button>
 
           <button

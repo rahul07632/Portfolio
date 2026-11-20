@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, ArrowUpRight, FileText, Compass } from 'lucide-react';
+import { X, ArrowUpRight, FileText, Compass, Volume2, VolumeX } from 'lucide-react';
 
 export default function MobileMenu({
   isOpen,
   onClose,
   onOpenResume,
   isTouring,
-  onToggleTour
+  onToggleTour,
+  isSoundPlaying,
+  onToggleSound
 }) {
   const location = useLocation();
   const currentPath = location.pathname.toLowerCase();
@@ -72,6 +74,30 @@ export default function MobileMenu({
       </div>
 
       <div className="flex flex-col gap-2.5">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSound();
+          }}
+          className={`w-full py-3.5 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-2 border transition-all ${
+            isSoundPlaying ? 'border-[var(--accent)] text-[var(--accent)]' : ''
+          }`}
+          style={isSoundPlaying ? { background: 'var(--bg-elevated)' } : { borderColor: 'var(--border)', background: 'var(--bg-elevated)', color: 'var(--text)' }}
+        >
+          {isSoundPlaying ? (
+            <>
+              <Volume2 className="w-4 h-4" style={{ color: 'var(--accent)' }} />
+              <span>Background Lo-Fi: Playing</span>
+            </>
+          ) : (
+            <>
+              <VolumeX className="w-4 h-4 opacity-70" />
+              <span>Background Lo-Fi: Muted</span>
+            </>
+          )}
+        </button>
+
         <button
           type="button"
           onClick={() => {
