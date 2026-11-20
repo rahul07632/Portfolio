@@ -1,43 +1,18 @@
 <!doctype html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" data-theme="dark" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      try {
-        if (JSON.parse(localStorage.getItem('rv_rebuilt_theme')) === 'light') {
-          document.documentElement.classList.remove('dark');
-        }
-      } catch {
-        // Keep the default dark theme when local storage is unavailable.
-      }
-    </script>
-    <meta name="theme-color" content="#09090b" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <title>Rahul Vishwakarma — Full-Stack &amp; Frontend Developer</title>
+    <meta name="description" content="Rahul Vishwakarma — 2025 B.Tech CSE Fresher &amp; Full-Stack Developer (React, Node.js, Express, MongoDB, Python)." />
     <meta name="author" content="Rahul Vishwakarma" />
-    <meta name="keywords" content="Rahul Vishwakarma, Full Stack Developer, MERN Developer, React Developer, Web Developer, Portfolio, India" />
-    <meta name="description" content="Rahul Vishwakarma — Fresher Full Stack Developer portfolio showcasing React, MERN stack, REST API, and responsive web projects." />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Rahul Vishwakarma Portfolio" />
-    <meta property="og:title" content="Rahul Vishwakarma — Full Stack Developer" />
-    <meta property="og:description" content="Explore Rahul Vishwakarma's full-stack projects, technical skills, education, and developer profile." />
-    <meta property="og:url" content="https://portfolio-r12.netlify.app/" />
-    <meta property="og:image" content="https://portfolio-r12.netlify.app/favicon.svg" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Rahul Vishwakarma — Full Stack Developer" />
-    <meta name="twitter:description" content="Full-stack developer portfolio by Rahul Vishwakarma." />
-    <link rel="canonical" href="https://portfolio-r12.netlify.app/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Rahul Vishwakarma — Full Stack Developer</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
-    <script>window.tailwind = window.tailwind || {}; tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { display: ['"Syne"','sans-serif'], serif: ['"Instrument Serif"','serif'], sans: ['"Plus Jakarta Sans"','sans-serif'], mono: ['"JetBrains Mono"','monospace'] }, colors: { ink:'#09090B', paper:'#F4F3EF', volt:'#E2FF32', vermilion:'#D94E1F' } } } };</script>
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
-  <body class="antialiased selection:bg-volt selection:text-ink">
+  <body class="antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

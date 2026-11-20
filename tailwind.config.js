@@ -4,15 +4,15 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {
-      colors: {
-        primary: {
-          DEFAULT: '#3b82f6',
-          dark: '#60a5fa'
-        }
-      }
+      fontFamily: {
+        display: ['"Space Grotesk"', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+        sans: ['"Space Grotesk"', 'sans-serif'],
+      },
     },
   },
   plugins: [],

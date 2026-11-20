@@ -1,363 +1,312 @@
-:root {
-  --bg: #F4F3EF;
-  --surface: #EAE8E1;
-  --text: #0F0F12;
-  --muted: #52525B;
-  --border: rgba(15, 15, 18, 0.14);
-  --accent: #D94E1F;
-  --accent-fg: #FFFFFF;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+[data-theme='dark'] {
+  --bg: #0b0d13;
+  --bg-surface: rgba(18, 22, 32, 0.84);
+  --bg-elevated: #141925;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.18);
+  --accent: #e85d3f;
+  --accent-fg: #ffffff;
+  --glow: rgba(232, 93, 63, 0.28);
 }
 
-html.dark {
-  --bg: #09090B;
-  --surface: #121216;
-  --text: #F4F4F5;
-  --muted: #A1A1AA;
-  --border: rgba(255, 255, 255, 0.12);
-  --accent: #E2FF32;
-  --accent-fg: #09090B;
+[data-theme='light'] {
+  --bg: #f5f2eb;
+  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-elevated: #ffffff;
+  --text: #161614;
+  --text-muted: #57534e;
+  --border: rgba(22, 22, 20, 0.14);
+  --accent: #d94e28;
+  --accent-fg: #ffffff;
+  --glow: rgba(217, 78, 40, 0.2);
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  margin: 0;
+  padding: 0;
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   overflow-x: hidden;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: background-color 0.85s cubic-bezier(0.22, 1, 0.36, 1), color 0.75s ease;
 }
 
-html.theme-transitioning *,
-html.theme-transitioning *::before,
-html.theme-transitioning *::after {
-  transition-property: color, background-color, border-color, box-shadow, fill, stroke, transform, opacity, width, height, filter !important;
-  transition-duration: 1800ms !important;
-  transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1) !important;
+section[id] {
+  scroll-margin-top: 5rem;
 }
 
-::view-transition-old(root) {
-  animation: none;
+#webglGlobalCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
 }
 
-::view-transition-new(root) {
-  animation: theme-reveal 1800ms cubic-bezier(0.65, 0, 0.35, 1) both;
+#themeWipe {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  clip-path: circle(0% at 90% 5%);
 }
 
-@keyframes theme-reveal {
-  from {
-    clip-path: circle(0 at var(--theme-origin-x, 50vw) var(--theme-origin-y, 50vh));
-  }
-
-  to {
-    clip-path: circle(150vmax at var(--theme-origin-x, 50vw) var(--theme-origin-y, 50vh));
-  }
+#introCurtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #0b0d13;
+  color: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 
-.portfolio-preloader {
-  background: var(--bg);
-  color: var(--text);
-  transition: transform 1400ms cubic-bezier(0.65, 0, 0.35, 1);
-  will-change: transform;
-}
-
-.preloader-skip {
-  color: var(--muted);
-  transition: color 0.2s ease;
-}
-
-.preloader-skip:hover {
-  color: var(--accent);
-}
-
-.preloader-content {
+.atelier-card {
   position: relative;
-  isolation: isolate;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.2s ease, border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.75s ease;
+  overflow: hidden;
 }
 
-.preloader-title {
-  animation: preloader-title-in 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.preloader-title-accent {
-  display: inline-block;
-  animation: preloader-title-in 1100ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.preloader-code-mark {
+.atelier-card::before {
+  content: '';
   position: absolute;
-  top: 50%;
-  right: 0;
-  z-index: -1;
-  color: var(--accent);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(6rem, 18vw, 10rem);
-  font-weight: 600;
-  line-height: 1;
-  opacity: 0.07;
+  inset: 0;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), var(--glow), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
   pointer-events: none;
-  transform: translateY(-50%);
-  animation: preloader-mark-float 6s ease-in-out infinite;
+  z-index: 0;
 }
 
-.preloader-progress {
-  background: var(--border);
+.atelier-card:hover::before {
+  opacity: 1;
 }
 
-.preloader-progress-fill {
-  background: var(--accent);
-  animation: preloader-progress-in 2.25s cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-
-@keyframes preloader-title-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes preloader-progress-in {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes preloader-mark-float {
-  0%,
-  100% {
-    transform: translateY(-50%) rotate(-5deg);
-  }
-
-  50% {
-    transform: translateY(calc(-50% - 8px)) rotate(0deg);
-  }
-}
-
-.hairline {
-  border-color: var(--border);
-}
-
-.surface-box {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-}
-
-.accent-bg {
-  background-color: var(--accent);
-  color: var(--accent-fg);
-}
-
-.accent-text {
-  color: var(--accent);
-}
-
-.case-browser-shell {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(15, 15, 18, 0.06);
-}
-
-.case-browser-header {
-  background: rgba(15, 15, 18, 0.04);
-  border-bottom: 1px solid var(--border);
-  color: var(--muted);
-}
-
-html.dark .case-browser-header {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.case-sandbox-input,
-.case-sandbox-list-item,
-.case-sandbox-card {
-  border-color: var(--border);
-  background: var(--bg);
-  color: var(--text);
-}
-
-.case-sandbox-card:hover {
+.atelier-card:hover {
   border-color: var(--accent);
+  box-shadow: 0 18px 40px -15px var(--glow);
 }
 
-.case-sandbox-input::placeholder {
-  color: var(--muted);
-  opacity: 1;
+.atelier-card > * {
+  position: relative;
+  z-index: 1;
 }
 
-.case-sandbox-muted {
-  color: var(--muted);
+/* Interactive Navbar Pill Buttons */
+.nav-pill-btn {
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  transition: transform 0.18s ease, color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* Editorial Marquee */
-@keyframes marqueeScroll {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
+.nav-pill-btn:hover {
+  color: var(--accent);
+  background-color: var(--glow);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px -6px var(--glow);
 }
 
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marqueeScroll 28s linear infinite;
+.nav-pill-btn:active {
+  transform: scale(0.96);
 }
 
-.marquee-track:hover {
-  animation-play-state: paused;
+/* Interactive Mobile Menu Card Buttons */
+.mobile-card-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* Custom Precision Cursor (Desktop fine pointer only) */
-@media (pointer: fine) {
-  .agency-cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #09090B;
-    border-radius: 9999px;
-    background: #E2FF32;
-    box-shadow: 0 0 0 2px rgba(226, 255, 50, 0.28), 0 2px 12px rgba(0, 0, 0, 0.35);
-    pointer-events: none;
-    z-index: 99999;
-    opacity: 0;
-    will-change: transform;
-    transition: width 0.16s ease, height 0.16s ease, opacity 0.12s ease, background-color 0.2s ease;
-  }
-
-  .agency-cursor.is-visible {
-    opacity: 1;
-  }
-
-  .agency-cursor.is-hovering {
-    width: 38px;
-    height: 38px;
-    background: rgba(226, 255, 50, 0.22);
-    border-color: #E2FF32;
-    box-shadow: 0 0 0 2px rgba(226, 255, 50, 0.5), 0 0 18px rgba(226, 255, 50, 0.22);
-  }
+.mobile-card-btn:hover,
+.mobile-card-btn:active {
+  border-color: var(--accent);
+  background-color: var(--glow);
+  transform: translateX(6px) scale(0.99);
+  box-shadow: 0 10px 25px -10px var(--glow);
 }
 
-@media (pointer: coarse) {
-  .agency-cursor {
-    display: none !important;
-  }
+.interactive-input {
+  transition: transform 0.18s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Fast, subtle reveal animation */
-.editorial-reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1), transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+.interactive-input:hover,
+.interactive-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--glow);
+  transform: translateY(-2px);
 }
 
-.editorial-reveal.is-in {
-  opacity: 1;
-  transform: translateY(0);
+.email-copy-box {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.email-copy-box:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 10px 28px -8px var(--glow);
+  transform: translateY(-2px);
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
+.accent-btn {
   background: var(--accent);
+  color: var(--accent-fg);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
 }
 
-@media print {
-  body * {
-    visibility: hidden;
-  }
-
-  #resumeSheet,
-  #resumeSheet * {
-    visibility: visible;
-  }
-
-  #resumeSheet {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
+.accent-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 28px -6px var(--glow);
+  filter: brightness(1.08);
 }
 
+.accent-btn:active {
+  transform: scale(0.97);
+}
 
-/* Responsive fullscreen navigation */
-.mobile-menu {
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  background: var(--bg);
+/* Hero Secondary Resume Button Hover */
+.hero-secondary-btn {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.hero-secondary-btn:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px -8px var(--glow);
+}
+
+.hero-secondary-btn:active {
+  transform: scale(0.97);
+}
+
+/* Social Icon Button Hover (GitHub, LinkedIn) */
+.social-icon-btn {
   color: var(--text);
-  transform: translateY(-8px);
-  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.22s ease;
 }
 
-.mobile-menu.is-open {
-  display: flex;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
+.social-icon-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  background: var(--bg-elevated);
+  box-shadow: 0 12px 25px -8px var(--glow);
+}
+
+.social-icon-btn:active {
+  transform: scale(0.95);
+}
+
+.social-icon-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.social-icon-btn:hover svg {
+  transform: scale(1.15);
+}
+
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+/* Interactive Input Focus & Caret Styling */
+.interactive-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interactive-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--glow) !important;
+}
+
+/* ==========================================================
+   HARDWARE-ACCELERATED NATIVE OS CUSTOM CURSORS (0ms LAG)
+   - Dark Mode: Cyber-Glow Monolith Arrow & Quantum Reticle
+   - Light Mode: Minimalist Matte Ink Arrow & Designer Hand
+   - Contact Form: High-Visibility Distinct Text Cursors
+   ========================================================== */
+@media (pointer: fine) {
+  /* DARK MODE: Stealth Obsidian Blade with Radiant Coral Rim */
+  [data-theme='dark'],
+  [data-theme='dark'] body {
+    cursor: url('/cursors/dark-arrow.svg') 2 2, auto;
+  }
+
+  [data-theme='dark'] a,
+  [data-theme='dark'] button,
+  [data-theme='dark'] [role='button'],
+  [data-theme='dark'] .magnetic-btn,
+  [data-theme='dark'] label,
+  [data-theme='dark'] select,
+  [data-theme='dark'] .atelier-card {
+    cursor: url('/cursors/dark-pointer.svg') 16 16, pointer;
+  }
+
+  /* LIGHT MODE: Minimalist Matte Ink Arrow & Designer Hand */
+  [data-theme='light'],
+  [data-theme='light'] body {
+    cursor: url('/cursors/light-arrow.svg') 2 2, auto;
+  }
+
+  [data-theme='light'] a,
+  [data-theme='light'] button,
+  [data-theme='light'] [role='button'],
+  [data-theme='light'] .magnetic-btn,
+  [data-theme='light'] label,
+  [data-theme='light'] select,
+  [data-theme='light'] .atelier-card {
+    cursor: url('/cursors/light-pointer.svg') 9 2, pointer;
+  }
+
+  /* HIGH-VISIBILITY TEXT INPUT CURSORS & CARET */
+  input, textarea {
+    caret-color: var(--accent) !important;
+  }
+
+  [data-theme='dark'] input,
+  [data-theme='dark'] textarea {
+    cursor: url('/cursors/dark-text.svg') 16 16, text !important;
+  }
+
+  [data-theme='light'] input,
+  [data-theme='light'] textarea {
+    cursor: url('/cursors/light-text.svg') 12 14, text !important;
+  }
+}
+
+::selection {
+  background-color: var(--accent);
+  color: #ffffff;
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
+  * {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .editorial-reveal {
-    opacity: 1;
-    transform: none;
-  }
-
-  .preloader-title {
-    animation: none;
-  }
-
-  .preloader-title-accent,
-  .preloader-code-mark {
-    animation: none;
-  }
-
-  .preloader-progress-fill {
-    animation: none;
-    transform: scaleX(1);
   }
 }

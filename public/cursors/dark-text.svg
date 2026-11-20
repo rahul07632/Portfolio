@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <!-- Dark Mode: Pure Radiant Coral Laser Beam (ZERO sky-blue) -->
+  <defs>
+    <linearGradient id="pureCoralLaserGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffa38a" />
+      <stop offset="50%" stop-color="#ff6b4a" />
+      <stop offset="100%" stop-color="#e85d3f" />
+    </linearGradient>
+    <filter id="laserCoralGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.2" flood-color="#e85d3f" flood-opacity="0.95" />
+    </filter>
+  </defs>
+
+  <!-- Deep Obsidian Contrast Backing -->
+  <path d="M9 4H23M9 28H23M16 4V28" stroke="#05070d" stroke-width="5.5" stroke-linecap="round" />
+
+  <!-- Top & Bottom Coral Brackets -->
+  <path d="M10 4H22M11 7L16 4L21 7" stroke="#ffa38a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M10 28H22M11 25L16 28L21 25" stroke="#ffa38a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Radiant Coral Energy Laser Spine -->
+  <line x1="16" y1="4" x2="16" y2="28" stroke="url(#pureCoralLaserGrad)" stroke-width="2.8" stroke-linecap="round" filter="url(#laserCoralGlow)" />
+
+  <!-- Pure White Inner Laser Core -->
+  <line x1="16" y1="8" x2="16" y2="24" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+
+  <!-- Central Coral Plasma Core Pip with White Focal Dot -->
+  <circle cx="16" cy="16" r="3" fill="#e85d3f" stroke="#ffffff" stroke-width="1.2" filter="url(#laserCoralGlow)" />
+  <circle cx="16" cy="16" r="1.3" fill="#ffffff" />
+</svg>

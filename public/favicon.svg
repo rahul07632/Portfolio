@@ -1,4 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="#09090b"/>
-  <text x="32" y="47" fill="#e2ff32" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="900" letter-spacing="-4" text-anchor="middle">RV</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="coralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff7b5a" />
+      <stop offset="100%" stop-color="#e85d3f" />
+    </linearGradient>
+    <linearGradient id="vermilionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e85d3f" />
+      <stop offset="100%" stop-color="#d94e28" />
+    </linearGradient>
+    <style>
+      .bg { fill: #0b0d13; stroke: #e85d3f; stroke-width: 3; rx: 16; }
+      .text-r { fill: #f1f5f9; font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; font-size: 28px; }
+      .text-v { fill: url(#coralGrad); font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; font-size: 28px; }
+      .dot { fill: #e85d3f; }
+
+      @media (prefers-color-scheme: light) {
+        .bg { fill: #f5f2eb; stroke: #d94e28; stroke-width: 3; }
+        .text-r { fill: #161614; }
+        .text-v { fill: url(#vermilionGrad); }
+        .dot { fill: #d94e28; }
+      }
+    </style>
+  </defs>
+
+  <rect x="3" y="3" width="58" height="58" class="bg" />
+  <text x="21" y="42" text-anchor="middle" class="text-r" letter-spacing="-1">R</text>
+  <text x="41" y="42" text-anchor="middle" class="text-v" letter-spacing="-1">V</text>
+  <circle cx="51" cy="18" r="3.5" class="dot" />
 </svg>

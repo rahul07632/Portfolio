@@ -1,68 +1,42 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
-export default function MagneticButton({
-  children,
-  className = '',
-  onClick,
-  href,
-  target,
-  rel,
-  title,
-  type = 'button',
-  disabled = false
-}) {
-  const ref = useRef(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+export default function MagneticButton({ children, className = '', onClick, type = 'button', ...props }) {
+  const btnRef = useRef(null);
 
-  const handleMouseMove = (e) => {
-    if (!ref.current || disabled) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = e.clientX - (rect.left + rect.width / 2);
-    const y = e.clientY - (rect.top + rect.height / 2);
-    setPos({ x: x * 0.22, y: y * 0.22 });
-  };
+  useEffect(() => {
+    const el = btnRef.current;
+    if (!el) return;
 
-  const handleMouseLeave = () => {
-    setPos({ x: 0, y: 0 });
-  };
+    const onMouseMove = (e) => {
+      const r = el.getBoundingClientRect();
+      gsap.to(el, {
+        x: (e.clientX - r.left - r.width / 2) * 0.2,
+        y: (e.clientY - r.top - r.height / 2) * 0.2,
+        duration: 0.25
+      });
+    };
 
-  const style = {
-    transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
-    transition:
-      pos.x === 0 && pos.y === 0
-        ? 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)'
-        : 'transform 0.08s linear'
-  };
+    const onMouseLeave = () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)' });
+    };
 
-  if (href) {
-    return (
-      <a
-        ref={ref}
-        href={href}
-        target={target}
-        rel={rel}
-        title={title}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={style}
-        className={`inline-flex items-center justify-center ${className}`}
-      >
-        {children}
-      </a>
-    );
-  }
+    el.addEventListener('mousemove', onMouseMove);
+    el.addEventListener('mouseleave', onMouseLeave);
+
+    return () => {
+      el.removeEventListener('mousemove', onMouseMove);
+      el.removeEventListener('mouseleave', onMouseLeave);
+    };
+  }, []);
 
   return (
     <button
-      ref={ref}
+      ref={btnRef}
       type={type}
-      disabled={disabled}
-      title={title}
       onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={style}
-      className={`inline-flex items-center justify-center ${className}`}
+      className={`magnetic-btn ${className}`}
+      {...props}
     >
       {children}
     </button>

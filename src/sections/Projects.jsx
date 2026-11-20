@@ -1,68 +1,136 @@
+import React, { useState } from 'react';
+import { Play, ExternalLink } from 'lucide-react';
+import { PROJECTS } from '../data/portfolioData';
+
 export default function Projects() {
+  const [activeProjectId, setActiveProjectId] = useState('todo');
+  const [viewport, setViewport] = useState('desktop');
+
+  const activeProject = PROJECTS.find((p) => p.id === activeProjectId) || PROJECTS[0];
+
   return (
-    <>
-      <section id="work" className="py-20 sm:py-28 border-b hairline">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 editorial-reveal">
-            <div>
-              <span className="font-mono text-xs uppercase tracking-widest accent-text block mb-2">01 // SELECTED CASE STUDIES</span>
-              <h2 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight uppercase">
-                Deployed <span className="font-serif italic font-normal lowercase">Applications</span>
-              </h2>
-            </div>
-            <p className="text-sm max-w-md opacity-75">
-              Select a project from the editorial index to inspect its engineering architecture, verified live URL, and test its interactive sandbox directly.
-            </p>
-          </div>
+    <section id="showcase" className="relative z-10 py-16 sm:py-20 px-4 sm:px-6 max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        <div>
+          <span className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            02 / Interactive Project Stage
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold mt-1.5">
+            Select a build to run live.
+          </h2>
+        </div>
+        <p className="text-sm max-w-md" style={{ color: 'var(--text-muted)' }}>
+          Switch between my 3 deployed applications on the left to test them live on the right.
+        </p>
+      </div>
 
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8 editorial-reveal" role="tablist" aria-label="Project Case Studies">
-            <button type="button" data-case-id="todo" className="case-tab-btn text-left p-5 rounded-2xl accent-bg transition-all">
-              <div className="font-mono text-[11px] opacity-80 mb-1">CASE 01 // CLIENT STATE &amp; CRUD</div>
-              <div className="font-display font-bold text-lg">Todo Application</div>
-              <div className="font-mono text-[11px] mt-1 opacity-80">todoo21.ccbp.tech ↗</div>
-            </button>
-
-            <button type="button" data-case-id="wiki" className="case-tab-btn text-left p-5 rounded-2xl surface-box hover:border-[var(--accent)] transition-all">
-              <div className="font-mono text-[11px] opacity-60 mb-1">CASE 02 // ASYNC REST API</div>
-              <div className="font-display font-bold text-lg">Wikipedia Search App</div>
-              <div className="font-mono text-[11px] mt-1 opacity-60">wikipedia987.ccbp.tech ↗</div>
-            </button>
-
-            <button type="button" data-case-id="countries" className="case-tab-btn text-left p-5 rounded-2xl surface-box hover:border-[var(--accent)] transition-all">
-              <div className="font-mono text-[11px] opacity-60 mb-1">CASE 03 // REAL-TIME FILTERING</div>
-              <div className="font-display font-bold text-lg">Countries Search App</div>
-              <div className="font-mono text-[11px] mt-1 opacity-60">population212.ccbp.tech ↗</div>
-            </button>
-          </div>
-
-
-          <div id="caseStudyStage" className="surface-box rounded-3xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start editorial-reveal">
-
-            <div id="caseNarrativeCol" className="lg:col-span-6 space-y-6">
-
-            </div>
-
-
-            <div className="lg:col-span-6">
-              <div className="rounded-2xl case-browser-shell overflow-hidden shadow-2xl">
-                <div className="case-browser-header px-4 py-3 flex items-center justify-between font-mono text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <span id="stageBrowserUrl" className="ml-2 truncate max-w-[200px] sm:max-w-xs case-sandbox-muted">https://todoo21.ccbp.tech/</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded bg-volt/15 text-volt text-[10px]">LIVE SANDBOX</span>
+      <div className="grid lg:grid-cols-12 gap-6 items-stretch">
+        <div id="projectList" className="lg:col-span-5 flex flex-col gap-3">
+          {PROJECTS.map((p) => {
+            const isActive = p.id === activeProjectId;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setActiveProjectId(p.id)}
+                className="atelier-card rounded-2xl p-5 text-left transition-all"
+                style={
+                  isActive
+                    ? {
+                        borderColor: p.accent,
+                        boxShadow: `0 12px 30px -12px ${p.accent}44`
+                      }
+                    : {}
+                }
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold" style={{ color: p.accent }}>
+                    {p.index} / {p.category}
+                  </span>
+                  <Play
+                    className="w-3.5 h-3.5"
+                    style={{ color: isActive ? p.accent : 'var(--text-muted)' }}
+                  />
                 </div>
-                <div id="caseSandboxBody" className="p-5 sm:p-6 min-h-[300px]">
-
+                <h3 className="text-xl font-bold mt-1.5">{p.title}</h3>
+                <p className="text-xs leading-relaxed mt-1.5" style={{ color: 'var(--text-muted)' }}>
+                  {p.description}
+                </p>
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {p.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="px-2 py-0.5 rounded-md border font-mono text-[10px]"
+                      style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="lg:col-span-7 atelier-card rounded-3xl overflow-hidden flex flex-col min-h-[460px]">
+          <div
+            className="px-4 py-3 border-b flex flex-wrap items-center justify-between gap-2"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
+          >
+            <span id="stageTitle" className="font-mono text-xs font-semibold" style={{ color: activeProject.accent }}>
+              {activeProject.title} — Live Stage
+            </span>
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center p-1 rounded-lg border" style={{ borderColor: 'var(--border)' }}>
+                <button
+                  type="button"
+                  onClick={() => setViewport('desktop')}
+                  className={`vp-btn px-2 py-1 rounded text-xs font-mono ${
+                    viewport === 'desktop' ? 'accent-btn font-semibold' : ''
+                  }`}
+                  style={{ color: viewport === 'desktop' ? '' : 'var(--text-muted)' }}
+                >
+                  Desktop
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewport('mobile')}
+                  className={`vp-btn px-2 py-1 rounded text-xs font-mono ${
+                    viewport === 'mobile' ? 'accent-btn font-semibold' : ''
+                  }`}
+                  style={{ color: viewport === 'mobile' ? '' : 'var(--text-muted)' }}
+                >
+                  Mobile
+                </button>
               </div>
+
+              <a
+                id="stageOpenLink"
+                href={activeProject.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold accent-btn"
+              >
+                Open Site <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
+          </div>
+
+          <div className="flex-1 p-3 flex items-center justify-center bg-black/30">
+            <iframe
+              id="stageIframe"
+              title="Live Project Stage"
+              src={activeProject.url}
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              className="h-[420px] rounded-xl bg-white border transition-all duration-300"
+              style={{
+                width: viewport === 'mobile' ? '375px' : '100%',
+                borderColor: 'var(--border)'
+              }}
+            />
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

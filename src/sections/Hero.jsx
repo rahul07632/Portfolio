@@ -1,121 +1,134 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowDownRight, FileText, Zap } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '../components/Icons';
+import MagneticButton from '../components/MagneticButton';
+import { SCENES } from '../data/portfolioData';
 
-export default function Hero() {
+export default function Hero({
+  theme,
+  activeSceneId,
+  onSelectScene,
+  onTriggerPulse,
+  onOpenResume
+}) {
+  const currentScenes = SCENES[theme] || SCENES.dark;
+
   return (
-    <>
-      <section id="hero" className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-between border-b hairline overflow-hidden">
-        <div className="max-w-[1400px] w-full mx-auto px-4 sm:px-8 py-10 sm:py-14 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center flex-1">
+    <section id="hero" className="relative z-10 py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+      <div className="grid lg:grid-cols-12 gap-10 items-end">
+        <div className="lg:col-span-8 space-y-6">
+          <div className="hero-reveal inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full atelier-card text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span style={{ color: 'var(--accent)' }}>
+              FRESHER 2025 · FRONTEND &amp; FULL-STACK DEVELOPER
+            </span>
+            <span className="hidden sm:inline" style={{ color: 'var(--text-muted)' }}>
+              · Katni, MP
+            </span>
+          </div>
 
+          <h1 className="hero-reveal text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.03]">
+            Engineering <span className="font-serif italic font-semibold" style={{ color: 'var(--accent)' }}>expressive</span>
+            <br />
+            web systems.
+          </h1>
 
-          <div className="lg:col-span-7 space-y-7 z-10">
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border hairline font-mono text-[11px] uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Available for Software &amp; Full-Stack Roles • Fresher CSE Graduate</span>
+          <p className="hero-reveal text-base sm:text-lg max-w-xl leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+            I am <strong style={{ color: 'var(--text)' }}>Rahul Vishwakarma</strong> — a 2025 B.Tech CSE Fresher crafting responsive React interfaces, Node.js &amp; Express APIs, and clean full-stack web applications.
+          </p>
+
+          <div className="hero-reveal flex flex-wrap items-center gap-4 sm:gap-5 pt-2">
+            <Link
+              to="/showcase"
+              className="magnetic-btn accent-btn group inline-flex items-center gap-3 px-6 py-3.5 rounded-xl font-semibold text-sm cursor-pointer shadow-md"
+            >
+              <span>Enter Project Stage</span>
+              <span className="relative flex items-center justify-center w-5 h-5 rounded-full bg-white/20 transition-all duration-300 group-hover:bg-white group-hover:text-[var(--accent)] group-hover:scale-110 group-hover:rotate-45">
+                <svg className="w-3.5 h-3.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </span>
+            </Link>
+
+            <button
+              id="heroResumeBtn"
+              type="button"
+              onClick={onOpenResume}
+              className="magnetic-btn hero-secondary-btn atelier-card group inline-flex items-center gap-2.5 px-5 py-3.5 rounded-xl font-semibold text-sm cursor-pointer"
+            >
+              <FileText className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" style={{ color: 'var(--accent)' }} />
+              <span>Resume Viewer</span>
+            </button>
+
+            <div className="flex items-center gap-3 sm:ml-2">
+              <a
+                href="https://github.com/rahul07632"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                title="GitHub Profile"
+                className="magnetic-btn social-icon-btn p-3.5 rounded-xl inline-flex items-center justify-center cursor-pointer"
+              >
+                <GithubIcon className="w-4 h-4" />
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/rahulvishwakarma78/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                title="LinkedIn Profile"
+                className="magnetic-btn social-icon-btn p-3.5 rounded-xl inline-flex items-center justify-center cursor-pointer"
+              >
+                <LinkedinIcon className="w-4 h-4" />
+              </a>
             </div>
+          </div>
+        </div>
 
-            <div className="space-y-1">
-              <h1 className="font-display font-extrabold text-5xl sm:text-7xl xl:text-[84px] leading-[0.94] tracking-tight uppercase">
-                Rahul<br />
-                <span className="font-serif italic font-normal lowercase tracking-normal accent-text">Vishwakarma</span>
-              </h1>
-              <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.22em] pt-3 opacity-75">
-                Full Stack Developer — Katni, Madhya Pradesh, India
-              </p>
-            </div>
-
-            <p className="text-base sm:text-lg max-w-xl leading-relaxed opacity-85">
-              I build responsive web interfaces, asynchronous REST API integrations, and full-stack projects grounded in strong fundamentals. As a <strong className="font-semibold">2025 Computer Science graduate</strong>, I combine my B.Tech foundation with intensive training from <strong className="font-semibold">NxtWave CCBP 4.0 Academy</strong> to create practical, production-minded applications.
-            </p>
-
-
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <Link to="/work" className="magnetic-el inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full accent-bg font-display font-bold text-xs sm:text-sm uppercase tracking-wider hover:opacity-90 transition-all">
-                <span>Explore Case Studies</span>
-                <i data-lucide="arrow-down-right" className="w-4 h-4"></i>
-              </Link>
-
-              <button id="heroResumeBtn" type="button" className="magnetic-el inline-flex items-center gap-2 px-5 py-3.5 rounded-full border hairline font-mono text-xs uppercase tracking-wider hover:border-[var(--accent)] transition-all">
-                <i data-lucide="file-text" className="w-4 h-4 accent-text"></i>
-                <span>View &amp; Download Resume</span>
+        {/* 3D Scene Engine Card: 3 Dark Modes + 3 Different Light Modes */}
+        <div className="lg:col-span-4 hero-reveal">
+          <div className="atelier-card rounded-3xl p-5 space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span id="sceneEngineLabel" className="font-mono text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                {theme === 'dark' ? '3D Dark Scenes (3)' : 'Light 3D Scenes (3)'}
+              </span>
+              <button
+                id="shockwaveBtn"
+                type="button"
+                onClick={onTriggerPulse}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono accent-btn font-semibold hover-lift"
+              >
+                <Zap className="w-3 h-3" /> Pulse
               </button>
-
-              <Link to="/contact" className="magnetic-el inline-flex items-center gap-2 px-5 py-3.5 rounded-full border hairline font-mono text-xs uppercase tracking-wider hover:border-[var(--accent)] transition-all">
-                <span>Contact</span>
-              </Link>
             </div>
 
-
-            <div className="pt-4 flex flex-wrap items-center gap-5 font-mono text-xs">
-              <a href="https://github.com/rahul07632" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 opacity-80 hover:opacity-100 hover:accent-text transition-colors">
-                <i data-lucide="github" className="w-4 h-4"></i>
-                <span>github.com/rahul07632</span>
-                <i data-lucide="arrow-up-right" className="w-3 h-3"></i>
-              </a>
-              <a href="https://www.linkedin.com/in/rahulvishwakarma78/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 opacity-80 hover:opacity-100 hover:accent-text transition-colors">
-                <i data-lucide="linkedin" className="w-4 h-4"></i>
-                <span>linkedin.com/in/rahulvishwakarma78</span>
-                <i data-lucide="arrow-up-right" className="w-3 h-3"></i>
-              </a>
+            <div id="sceneButtonsGrid" className="grid grid-cols-3 gap-2">
+              {currentScenes.map((s) => {
+                const isActive = s.id === activeSceneId;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => onSelectScene(s.id)}
+                    className={`scene-btn py-2 rounded-xl text-xs font-mono transition-all hover-lift ${
+                      isActive ? 'accent-btn font-semibold' : 'border'
+                    }`}
+                    style={isActive ? {} : { borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+                  >
+                    {s.label}
+                  </button>
+                );
+              })}
             </div>
-          </div>
 
-
-          <div className="lg:col-span-5">
-            <div className="surface-box rounded-3xl overflow-hidden relative">
-
-              <div className="px-5 py-3.5 border-b hairline flex items-center justify-between font-mono text-[11px]">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[var(--accent)]"></span>
-                  <span>WEBGL // KINETIC CORE</span>
-                </span>
-                <span id="webglCoords" className="opacity-60">X:0.00 Y:0.00</span>
-              </div>
-
-
-              <div id="threeContainer" className="w-full h-[300px] sm:h-[360px] cursor-grab active:cursor-grabbing relative">
-                <div className="absolute bottom-3 left-4 font-mono text-[10px] opacity-60 pointer-events-none">
-                  Move cursor or drag to rotate 3D mesh
-                </div>
-              </div>
-
-
-              <div className="px-5 py-3 border-t hairline flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
-                <span className="opacity-65">3D Mode:</span>
-                <div className="flex items-center gap-1.5">
-                  <button type="button" data-mesh-mode="wireframe" className="mesh-mode-btn px-2.5 py-1 rounded-full accent-bg font-semibold">Wireframe</button>
-                  <button type="button" data-mesh-mode="faceted" className="mesh-mode-btn px-2.5 py-1 rounded-full border hairline hover:border-[var(--accent)]">Faceted</button>
-                  <button type="button" data-mesh-mode="particles" className="mesh-mode-btn px-2.5 py-1 rounded-full border hairline hover:border-[var(--accent)]">Particles</button>
-                </div>
-              </div>
-            </div>
+            <p className="text-[11px] font-mono leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              3 unique 3D scenes per theme. Move cursor to bend or click Pulse!
+            </p>
           </div>
         </div>
-
-
-        <div className="border-t hairline py-3.5 overflow-hidden bg-[var(--surface)]">
-          <div className="marquee-track font-mono text-xs uppercase tracking-[0.2em] flex items-center gap-8">
-            <span>REACT.JS</span><span className="accent-text">✦</span>
-            <span>JAVASCRIPT (ES6+)</span><span className="accent-text">✦</span>
-            <span>NODE.JS &amp; EXPRESS</span><span className="accent-text">✦</span>
-            <span>PYTHON</span><span className="accent-text">✦</span>
-            <span>SQL &amp; SQLITE</span><span className="accent-text">✦</span>
-            <span>HTML5 &amp; CSS3</span><span className="accent-text">✦</span>
-            <span>REST APIS</span><span className="accent-text">✦</span>
-            <span>B.TECH CSE 2025</span><span className="accent-text">✦</span>
-            <span>NXTWAVE CCBP 4.0</span><span className="accent-text">✦</span>
-
-            <span>REACT.JS</span><span className="accent-text">✦</span>
-            <span>JAVASCRIPT (ES6+)</span><span className="accent-text">✦</span>
-            <span>NODE.JS &amp; EXPRESS</span><span className="accent-text">✦</span>
-            <span>PYTHON</span><span className="accent-text">✦</span>
-            <span>SQL &amp; SQLITE</span><span className="accent-text">✦</span>
-            <span>HTML5 &amp; CSS3</span><span className="accent-text">✦</span>
-            <span>REST APIS</span><span className="accent-text">✦</span>
-            <span>B.TECH CSE 2025</span><span className="accent-text">✦</span>
-            <span>NXTWAVE CCBP 4.0</span><span className="accent-text">✦</span>
-          </div>
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

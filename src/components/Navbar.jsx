@@ -1,66 +1,140 @@
-import { NavLink, Link, useLocation } from "react-router-dom";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Compass, Sun, Moon, FileText, Menu } from 'lucide-react';
+import MagneticButton from './MagneticButton';
+import Logo from './Logo';
 
-export default function Navbar({ onMenuOpen, isMenuOpen }) {
-  const { pathname } = useLocation();
+export default function Navbar({
+  theme,
+  onToggleTheme,
+  isTouring,
+  onToggleTour,
+  onStopTour,
+  onOpenResume,
+  onOpenMobileMenu
+}) {
+  const location = useLocation();
+  const currentPath = location.pathname.toLowerCase();
+
   const navItems = [
-    ["/work", "01", "Case Studies"],
-    ["/stack", "02", "Tech Stack"],
-    ["/about", "03", "Profile"],
-    ["/education", "04", "Education"],
-    ["/contact", "05", "Contact"],
+    { path: '/', label: '00 Opening', id: 'hero', aliases: ['/opening'] },
+    { path: '/identity', label: '01 Identity', id: 'identity', aliases: ['/about'] },
+    { path: '/showcase', label: '02 Showcase', id: 'showcase', aliases: ['/work', '/projects'] },
+    { path: '/craft', label: '03 Craft', id: 'craft', aliases: ['/skills', '/stack'] },
+    { path: '/dispatch', label: '04 Dispatch', id: 'dispatch', aliases: ['/contact'] }
   ];
 
   return (
-    <>
-<header className="fixed top-0 left-0 right-0 z-50 border-b hairline backdrop-blur-md bg-[var(--bg)]/85">
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <Link
-        to="/"
-        onClick={(event) => {
-          if (pathname === "/") {
-            event.preventDefault();
-            document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });
-          }
-        }}
-        className="flex items-center gap-3 group"
-      >
-        <span className="w-8 h-8 rounded-full accent-bg flex items-center justify-center font-display font-bold text-xs tracking-tighter group-hover:scale-105 transition-transform">RV</span>
-        <div className="leading-tight">
-          <span className="font-display font-bold text-sm tracking-tight block">RAHUL VISHWAKARMA</span>
-          <span className="font-mono text-[10px] opacity-65 block">FULL STACK DEVELOPER</span>
+    <header
+      className="fixed top-0 left-0 right-0 z-40 border-b backdrop-blur-xl transition-colors duration-300"
+      style={{ borderColor: 'var(--border)', background: 'var(--bg-surface)' }}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <Link
+          to="/"
+          onClick={onStopTour}
+          className="flex items-center gap-2.5 text-left group"
+        >
+          <Logo />
+          <div className="leading-tight">
+            <span className="font-bold text-sm sm:text-base block">Rahul Vishwakarma</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest block transition-colors" style={{ color: 'var(--accent)' }}>
+              Fresher · Full-Stack Dev
+            </span>
+          </div>
+        </Link>
+
+        {/* Interactive React Router Pill Links */}
+        <nav className="hidden lg:flex items-center gap-1.5 text-xs font-mono">
+          {navItems.map((item) => {
+            const isActive = currentPath === item.path || item.aliases.includes(currentPath);
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={onStopTour}
+                className={`nav-pill-btn px-3 py-1.5 rounded-xl transition-all ${
+                  isActive ? 'accent-btn font-semibold shadow-sm' : ''
+                }`}
+                style={isActive ? {} : { color: 'var(--text-muted)' }}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          {/* Enhanced Auto Tour Button */}
+          <button
+            id="autoTourBtn"
+            type="button"
+            title={isTouring ? "Click to stop tour" : "Start automated showcase tour"}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleTour();
+            }}
+            className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono border transition-all ${
+              isTouring
+                ? 'accent-btn font-semibold shadow-lg scale-105'
+                : 'hover-lift'
+            }`}
+            style={
+              isTouring
+                ? {}
+                : {
+                    borderColor: 'var(--border)',
+                    background: 'var(--bg-elevated)',
+                    color: 'var(--text-muted)'
+                  }
+            }
+          >
+            <Compass
+              className={`w-3.5 h-3.5 ${isTouring ? 'animate-spin' : ''}`}
+              style={isTouring ? {} : { color: 'var(--accent)' }}
+            />
+            <span>{isTouring ? 'Stop Tour' : 'Auto Tour'}</span>
+          </button>
+
+          <button
+            id="themeToggleBtn"
+            type="button"
+            aria-label="Switch Theme"
+            onClick={onToggleTheme}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-semibold border hover-lift"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+            ) : (
+              <Moon className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+            )}
+            <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+          </button>
+
+          <MagneticButton
+            onClick={() => {
+              onStopTour();
+              onOpenResume();
+            }}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-mono font-semibold accent-btn"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Resume
+          </MagneticButton>
+
+          <button
+            id="mobileMenuBtn"
+            type="button"
+            aria-label="Open Menu"
+            onClick={onOpenMobileMenu}
+            className="lg:hidden p-2 rounded-xl border active:scale-95 transition-transform"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
-      </Link>
-
-      
-      <nav aria-label="Primary Navigation" className="hidden lg:flex items-center gap-7 font-mono text-xs uppercase tracking-wider">
-        {navItems.map(([to, number, label]) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `hover:accent-text transition-colors ${isActive ? "accent-text" : ""}`}>
-            <span className="opacity-45 mr-1">{number}</span>{label}
-          </NavLink>
-        ))}
-      </nav>
-
-      
-      <div className="flex items-center gap-2 sm:gap-3">
-        <span id="liveClock" className="hidden sm:inline-block font-mono text-[11px] opacity-65 border-r hairline pr-3">IST --:--</span>
-
-        <button id="themeBtn" type="button" aria-label="Switch Theme" className="px-3 py-1.5 rounded-full border hairline font-mono text-[11px] uppercase tracking-wider hover:border-[var(--accent)] transition-colors">
-          <span className="dark:hidden">Obsidian</span>
-          <span className="hidden dark:inline">Editorial Light</span>
-        </button>
-
-        <button id="openResumeBtn" type="button" className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full accent-bg font-mono text-[11px] font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity">
-          <span>Resume</span>
-          <i data-lucide="arrow-up-right" className="w-3.5 h-3.5"></i>
-        </button>
-
-        <button id="menuOverlayBtn" type="button" aria-label={isMenuOpen ? "Close menu" : "Open navigation menu"} aria-expanded={isMenuOpen} aria-controls="menuOverlay" onClick={onMenuOpen} className="lg:hidden px-3 py-2 rounded-full border hairline font-mono text-[11px] uppercase">
-          {isMenuOpen ? "Close ✕" : "Menu ☰"}
-        </button>
       </div>
-    </div>
-  </header>
-    </>
+    </header>
   );
 }

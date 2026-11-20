@@ -1,58 +1,53 @@
+import React, { useState } from 'react';
+import { SKILLS } from '../data/portfolioData';
+
 export default function TechStack() {
+  const [filter, setFilter] = useState('All');
+
+  const filteredSkills = filter === 'All' ? SKILLS : SKILLS.filter((s) => s.group === filter);
+
   return (
-    <>
-<section id="stack" className="py-20 sm:py-28 border-b hairline">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
-        <div className="mb-12 editorial-reveal">
-          <span className="font-mono text-xs uppercase tracking-widest accent-text block mb-2">02 // TECHNICAL CAPABILITIES</span>
-          <h2 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight uppercase">
-            Engineering <span className="font-serif italic font-normal lowercase">Stack Ledger</span>
+    <section id="craft" className="relative z-10 py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div>
+          <span className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            03 / Technical Craft
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold mt-1.5">
+            Interactive Skill Constellation.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start editorial-reveal">
-          
-          <div className="lg:col-span-5 divide-y hairline border-t border-b hairline">
-            <button type="button" data-layer="frontend" className="stack-row-btn w-full text-left py-5 px-4 flex items-center justify-between accent-bg transition-all">
-              <div>
-                <span className="font-mono text-[11px] opacity-75 block">LAYER 01</span>
-                <span className="font-display font-bold text-xl">Frontend Architecture</span>
-              </div>
-              <i data-lucide="arrow-right" className="w-5 h-5"></i>
+        <div className="inline-flex flex-wrap gap-1.5 p-1 rounded-xl border" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}>
+          {['All', 'Frontend', 'Backend', 'Database', 'Tools'].map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setFilter(cat)}
+              className={`skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono ${
+                filter === cat ? 'accent-btn font-semibold' : ''
+              }`}
+              style={{ color: filter === cat ? '' : 'var(--text-muted)' }}
+            >
+              {cat}
             </button>
-
-            <button type="button" data-layer="backend" className="stack-row-btn w-full text-left py-5 px-4 flex items-center justify-between hover:bg-[var(--surface)] transition-all">
-              <div>
-                <span className="font-mono text-[11px] opacity-60 block">LAYER 02</span>
-                <span className="font-display font-bold text-xl">Backend &amp; APIs</span>
-              </div>
-              <i data-lucide="arrow-right" className="w-5 h-5 opacity-50"></i>
-            </button>
-
-            <button type="button" data-layer="database" className="stack-row-btn w-full text-left py-5 px-4 flex items-center justify-between hover:bg-[var(--surface)] transition-all">
-              <div>
-                <span className="font-mono text-[11px] opacity-60 block">LAYER 03</span>
-                <span className="font-display font-bold text-xl">Databases &amp; Storage</span>
-              </div>
-              <i data-lucide="arrow-right" className="w-5 h-5 opacity-50"></i>
-            </button>
-
-            <button type="button" data-layer="tooling" className="stack-row-btn w-full text-left py-5 px-4 flex items-center justify-between hover:bg-[var(--surface)] transition-all">
-              <div>
-                <span className="font-mono text-[11px] opacity-60 block">LAYER 04</span>
-                <span className="font-display font-bold text-xl">Workflow &amp; Deployment</span>
-              </div>
-              <i data-lucide="arrow-right" className="w-5 h-5 opacity-50"></i>
-            </button>
-          </div>
-
-          
-          <div id="stackInspector" className="lg:col-span-7 surface-box rounded-3xl p-6 sm:p-8 space-y-6">
-            
-          </div>
+          ))}
         </div>
       </div>
+
+      <div id="skillGrid" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
+        {filteredSkills.map((s) => (
+          <div key={s.name} className="atelier-card hover-lift rounded-2xl p-4 sm:p-5 cursor-default">
+            <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
+              {s.group}
+            </span>
+            <div className="font-bold text-base sm:text-lg mt-1">{s.name}</div>
+            <p className="text-xs mt-1.5 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              {s.note}
+            </p>
+          </div>
+        ))}
+      </div>
     </section>
-    </>
   );
 }
