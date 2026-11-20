@@ -7,7 +7,7 @@ export default function Footer() {
       className="relative z-10 border-t py-7 px-4 sm:px-6 text-xs font-mono"
       style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
     >
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-[11px] sm:text-xs">
         <span>© 2026 Rahul Vishwakarma · Katni, MP, India</span>
         <a
           href="#hero"

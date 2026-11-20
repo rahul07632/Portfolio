@@ -31,16 +31,16 @@ export default function Navbar({
       className="fixed top-0 left-0 right-0 z-40 border-b backdrop-blur-xl transition-colors duration-300"
       style={{ borderColor: 'var(--border)', background: 'var(--bg-surface)' }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-3">
         <Link
           to="/"
           onClick={onStopTour}
-          className="flex items-center gap-2.5 text-left group"
+          className="flex items-center gap-2 sm:gap-2.5 text-left group min-w-0"
         >
           <Logo />
-          <div className="leading-tight">
-            <span className="font-bold text-sm sm:text-base block">Rahul Vishwakarma</span>
-            <span className="font-mono text-[10px] uppercase tracking-widest block transition-colors" style={{ color: 'var(--accent)' }}>
+          <div className="leading-tight truncate">
+            <span className="font-bold text-xs sm:text-base block truncate">Rahul Vishwakarma</span>
+            <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-wider block transition-colors truncate" style={{ color: 'var(--accent)' }}>
               Fresher · Full-Stack Dev
             </span>
           </div>
@@ -66,7 +66,7 @@ export default function Navbar({
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Enhanced Auto Tour Button */}
           <button
             id="autoTourBtn"
@@ -134,7 +134,7 @@ export default function Navbar({
             type="button"
             aria-label="Switch Theme"
             onClick={onToggleTheme}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-semibold border hover-lift"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-mono font-semibold border hover-lift"
             style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
           >
             {theme === 'dark' ? (
@@ -142,7 +142,7 @@ export default function Navbar({
             ) : (
               <Moon className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
             )}
-            <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            <span className="hidden min-[400px]:inline">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
           </button>
 
           <MagneticButton

@@ -17,9 +17,27 @@ export default function IntroCurtain() {
   const currentYRef = useRef(0);
   const triggeredRef = useRef(false);
 
-  const INITIAL_CORD_HEIGHT = 80;  // Starts cleanly near ceiling
-  const MIN_TRIGGER_DISTANCE = 35;  // Release anytime after a small pull
-  const MAX_PULL_DISTANCE = 180;    // Perfectly calibrated so 100% stays clearly visible on screen!
+  const [dimensions, setDimensions] = useState(() => {
+    const h = typeof window !== 'undefined' ? window.innerHeight : 800;
+    return {
+      cordHeight: h < 640 ? 46 : 72,
+      maxPull: h < 640 ? 95 : 155,
+      minTrigger: h < 640 ? 25 : 35
+    };
+  });
+
+  useEffect(() => {
+    const onResize = () => {
+      const h = window.innerHeight;
+      setDimensions({
+        cordHeight: h < 640 ? 46 : 72,
+        maxPull: h < 640 ? 95 : 155,
+        minTrigger: h < 640 ? 25 : 35
+      });
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const triggerSwitch = () => {
     if (triggeredRef.current) return;
@@ -118,16 +136,15 @@ export default function IntroCurtain() {
   useEffect(() => {
     const handleMove = (clientY) => {
       if (!isDragging || triggeredRef.current) return;
-      // Pull freely all the way down up to MAX_PULL_DISTANCE (260px)
-      const delta = Math.max(0, Math.min(MAX_PULL_DISTANCE, clientY - dragStartYRef.current));
+      const delta = Math.max(0, Math.min(dimensions.maxPull, clientY - dragStartYRef.current));
       currentYRef.current = delta;
 
-      const progress = Math.min(1, delta / MAX_PULL_DISTANCE);
+      const progress = Math.min(1, delta / dimensions.maxPull);
       setDragProgress(progress);
 
       // Real-time cord stretching from ceiling
       if (cordRef.current) {
-        const scaleFactor = (INITIAL_CORD_HEIGHT + delta) / INITIAL_CORD_HEIGHT;
+        const scaleFactor = (dimensions.cordHeight + delta) / dimensions.cordHeight;
         gsap.set(cordRef.current, { scaleY: scaleFactor, transformOrigin: 'top center' });
       }
 
@@ -145,10 +162,10 @@ export default function IntroCurtain() {
       const delta = currentYRef.current;
 
       // User's choice: whether released halfway or all the way down, it switches on!
-      if (delta >= MIN_TRIGGER_DISTANCE) {
+      if (delta >= dimensions.minTrigger) {
         triggerSwitch();
       } else {
-        // If barely moved (< 40px), spring back to rest
+        // If barely moved, spring back to rest
         if (cordRef.current) {
           gsap.to(cordRef.current, {
             scaleY: 1,
@@ -168,7 +185,10 @@ export default function IntroCurtain() {
 
     const onMouseMove = (e) => handleMove(e.clientY);
     const onTouchMove = (e) => {
-      if (e.touches?.[0]) handleMove(e.touches[0].clientY);
+      if (e.touches?.[0]) {
+        e.preventDefault();
+        handleMove(e.touches[0].clientY);
+      }
     };
     const onMouseUp = () => handleEnd();
     const onTouchEnd = () => handleEnd();
@@ -197,16 +217,17 @@ export default function IntroCurtain() {
       }`}
       style={{
         backgroundColor: '#06080d', // 100% Solid Pitch Black
-        opacity: 1
+        opacity: 1,
+        touchAction: 'none'
       }}
     >
       {/* Top Header Tag */}
-      <div className="w-full flex items-center justify-between text-xs font-mono pt-4 sm:pt-6 max-w-4xl">
-        <div className="flex items-center gap-2 text-[#ff5733]">
-          <Sparkles className="w-4 h-4" />
-          <span className="uppercase tracking-widest font-semibold">Rahul Vishwakarma // Atelier 2025</span>
+      <div className="w-full flex items-center justify-between text-[10px] min-[360px]:text-xs font-mono pt-3 sm:pt-6 max-w-4xl px-1">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-[#ff5733] truncate">
+          <Sparkles className="w-3.5 h-3.5 shrink-0" />
+          <span className="uppercase tracking-wider font-semibold truncate">Rahul Vishwakarma // 2025</span>
         </div>
-        <div className="text-slate-500 uppercase tracking-widest hidden sm:block">
+        <div className="text-slate-500 uppercase tracking-widest hidden sm:block shrink-0">
           Physical Pull Switch
         </div>
       </div>
@@ -214,14 +235,14 @@ export default function IntroCurtain() {
       {/* ========================================================
           THE PHYSICAL PULL-CORD (PULL AS MUCH AS YOU WANT & RELEASE)
           ======================================================== */}
-      <div className="relative flex-1 flex flex-col items-center justify-start pt-4 sm:pt-8 w-full">
+      <div className="relative flex-1 flex flex-col items-center justify-start pt-2 sm:pt-6 w-full">
         {/* Ceiling Mount */}
-        <div className="w-14 h-3.5 rounded-full bg-white/20 border border-white/10 shadow-[0_0_12px_rgba(255,255,255,0.15)]" />
+        <div className="w-12 sm:w-14 h-3 sm:h-3.5 rounded-full bg-white/20 border border-white/10 shadow-[0_0_12px_rgba(255,255,255,0.15)]" />
 
         {/* The Hanging Cord (Stretches smoothly with your hand) */}
         <div
           ref={cordRef}
-          style={{ height: `${INITIAL_CORD_HEIGHT}px`, transformOrigin: 'top center' }}
+          style={{ height: `${dimensions.cordHeight}px`, transformOrigin: 'top center' }}
           className="w-[3px] bg-gradient-to-b from-white/50 via-[#ff5733] to-[#ff5733] shadow-[0_0_12px_rgba(255,87,51,0.5)]"
         />
 
@@ -239,24 +260,24 @@ export default function IntroCurtain() {
               startDrag(e.touches[0].clientY);
             }
           }}
-          className={`group relative -mt-1 flex flex-col items-center gap-3 select-none ${
+          className={`group relative -mt-1 flex flex-col items-center gap-2.5 sm:gap-3 select-none ${
             isDragging ? 'cursor-grabbing scale-105' : 'cursor-grab hover:scale-105'
           } transition-transform duration-150`}
           title="Click, pull down as much as you like, and release to switch!"
         >
           {/* Bulb Handle Orb */}
           <div
-            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#ff5733] via-[#ff6b47] to-[#ffa387] text-white shadow-[0_0_35px_rgba(255,87,51,0.6)]"
+            className="relative w-16 h-16 sm:w-22 sm:h-22 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#ff5733] via-[#ff6b47] to-[#ffa387] text-white shadow-[0_0_30px_rgba(255,87,51,0.6)]"
             style={{
               filter: `brightness(${1 + dragProgress * 0.35})`
             }}
           >
-            <Lightbulb className="w-10 h-10 sm:w-12 sm:h-12 fill-white transition-transform" />
+            <Lightbulb className="w-8 h-8 sm:w-11 sm:h-11 fill-white transition-transform" />
 
             {/* Subtle Pulsing Ripple when idle */}
             {!isDragging && !hasTriggered && (
               <span
-                className="absolute -inset-3 rounded-full border-2 border-[#ff5733] animate-ping opacity-30 pointer-events-none"
+                className="absolute -inset-2.5 sm:-inset-3 rounded-full border-2 border-[#ff5733] animate-ping opacity-30 pointer-events-none"
                 aria-hidden="true"
               />
             )}
@@ -264,13 +285,13 @@ export default function IntroCurtain() {
 
           {/* Interactive Status Pill with Live Pull Percentage */}
           <div
-            className="px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-widest uppercase bg-[#141928] border border-[#ff5733]/60 text-[#ff5733] flex items-center gap-2 shadow-xl"
+            className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-mono font-bold tracking-widest uppercase bg-[#141928] border border-[#ff5733]/60 text-[#ff5733] flex items-center gap-1.5 sm:gap-2 shadow-xl"
             style={{
               borderColor: isDragging ? '#ff5733' : 'rgba(255,87,51,0.4)',
               transform: `scale(${1 + dragProgress * 0.05})`
             }}
           >
-            <ArrowDown className={`w-3.5 h-3.5 ${isDragging ? 'translate-y-1' : 'animate-bounce'}`} />
+            <ArrowDown className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isDragging ? 'translate-y-0.5' : 'animate-bounce'}`} />
             <span>
               {isDragging
                 ? `PULLED: ${Math.round(dragProgress * 100)}%`
@@ -280,7 +301,7 @@ export default function IntroCurtain() {
 
           {/* Sleek Live Tension Bar */}
           {isDragging && (
-            <div className="w-28 h-1.5 bg-white/10 rounded-full overflow-hidden border border-white/10 -mt-1 shadow-inner">
+            <div className="w-24 sm:w-28 h-1 sm:h-1.5 bg-white/10 rounded-full overflow-hidden border border-white/10 -mt-1 shadow-inner">
               <div
                 className="h-full bg-gradient-to-r from-amber-400 to-[#ff5733] transition-all duration-75"
                 style={{ width: `${Math.round(dragProgress * 100)}%` }}
@@ -291,11 +312,11 @@ export default function IntroCurtain() {
       </div>
 
       {/* Bottom Identity & Prompt */}
-      <div ref={textRef} className="text-center space-y-2 pb-6 max-w-md">
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white uppercase">
+      <div ref={textRef} className="text-center space-y-1 pb-3 sm:pb-6 max-w-md px-2">
+        <h1 className="text-xl min-[360px]:text-3xl sm:text-4xl font-black tracking-tight text-white uppercase">
           Rahul Vishwakarma
         </h1>
-        <p className="font-mono text-xs text-slate-400 tracking-wider">
+        <p className="font-mono text-[10px] min-[360px]:text-[11px] sm:text-xs text-slate-400 tracking-wider">
           Pull the switch cord and <strong>release anytime</strong> to switch on.
         </p>
       </div>

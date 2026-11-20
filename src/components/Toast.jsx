@@ -7,14 +7,14 @@ export default function Toast({ toast }) {
   return (
     <div
       id="toast"
-      className="fixed bottom-6 right-6 z-[95] flex items-center gap-2.5 px-5 py-3 rounded-2xl border shadow-2xl text-xs font-mono font-semibold transition-all duration-200"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[95] inline-flex items-center gap-2 px-3.5 py-2 rounded-full border shadow-xl text-xs font-mono font-medium backdrop-blur-md pointer-events-none whitespace-nowrap"
       style={{
         background: 'var(--bg-elevated)',
         borderColor: 'var(--accent)',
         color: 'var(--text)'
       }}
     >
-      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
       <span>{toast.message}</span>
     </div>
   );

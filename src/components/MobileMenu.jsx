@@ -35,10 +35,10 @@ export default function MobileMenu({
   return (
     <div
       id="mobileMenu"
-      className="fixed inset-0 z-50 flex flex-col justify-between p-6 backdrop-blur-2xl"
+      className="fixed inset-0 z-50 flex flex-col justify-between p-4 sm:p-6 backdrop-blur-2xl overflow-y-auto max-h-screen"
       style={{ background: 'var(--bg)' }}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-2">
         <span className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
           Chapters
         </span>
@@ -47,14 +47,14 @@ export default function MobileMenu({
           type="button"
           aria-label="Close Menu"
           onClick={onClose}
-          className="p-2.5 rounded-xl border active:scale-95 transition-transform"
+          className="p-2 sm:p-2.5 rounded-xl border active:scale-95 transition-transform"
           style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
         >
           <X className="w-5 h-5" />
         </button>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2 sm:gap-3 my-auto py-2">
         {menuItems.map((item) => {
           const isActive = currentPath === item.path;
           return (
@@ -62,25 +62,25 @@ export default function MobileMenu({
               key={item.path}
               to={item.path}
               onClick={onClose}
-              className={`mobile-card-btn flex items-center justify-between px-5 py-4 rounded-2xl text-lg font-bold transition-all ${
+              className={`mobile-card-btn flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all ${
                 isActive ? 'border-[var(--accent)] shadow-lg' : ''
               }`}
             >
               <span>{item.label}</span>
-              <ArrowUpRight className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+              <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: 'var(--accent)' }} />
             </Link>
           );
         })}
       </div>
 
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2 sm:gap-2.5 pt-2">
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
             onToggleSound();
           }}
-          className={`w-full py-3.5 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-2 border transition-all ${
+          className={`w-full py-2.5 sm:py-3.5 rounded-xl font-mono text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-2 border transition-all ${
             isSoundPlaying ? 'border-[var(--accent)] text-[var(--accent)]' : ''
           }`}
           style={isSoundPlaying ? { background: 'var(--bg-elevated)' } : { borderColor: 'var(--border)', background: 'var(--bg-elevated)', color: 'var(--text)' }}
@@ -104,7 +104,7 @@ export default function MobileMenu({
             onClose();
             onToggleTour();
           }}
-          className={`w-full py-3.5 rounded-xl font-mono text-xs font-semibold flex items-center justify-center gap-2 border transition-all ${
+          className={`w-full py-2.5 sm:py-3.5 rounded-xl font-mono text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-2 border transition-all ${
             isTouring ? 'accent-btn' : ''
           }`}
           style={isTouring ? {} : { borderColor: 'var(--border)', background: 'var(--bg-elevated)', color: 'var(--text)' }}
@@ -120,7 +120,7 @@ export default function MobileMenu({
             onClose();
             onOpenResume();
           }}
-          className="w-full py-3.5 rounded-xl accent-btn font-mono text-sm font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform"
+          className="w-full py-2.5 sm:py-3.5 rounded-xl accent-btn font-mono text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform"
         >
           <FileText className="w-4 h-4" /> Open Resume Viewer
         </button>

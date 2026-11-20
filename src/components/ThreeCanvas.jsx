@@ -62,8 +62,10 @@ export default function ThreeCanvas({ theme = 'dark', activeSceneId = 'aurora', 
     scene.add(silkPoints);
 
     // Light Mode 2: Concentric 3D Solar Rings
+    const isMobile = window.innerWidth < 768;
     const ringsGroup = new THREE.Group();
-    ringsGroup.position.set(2.4, 0.2, -1);
+    ringsGroup.position.set(isMobile ? 0 : 2.4, isMobile ? 0.8 : 0.2, -1);
+    if (isMobile) ringsGroup.scale.setScalar(0.75);
     const r1 = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.04, 16, 80), new THREE.MeshBasicMaterial({ color: 0xd94e28, transparent: true, opacity: 0.55 }));
     const r2 = new THREE.Mesh(new THREE.TorusGeometry(3.0, 0.035, 16, 90), new THREE.MeshBasicMaterial({ color: 0x1e40af, transparent: true, opacity: 0.42 }));
     const r3 = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.045, 16, 60), new THREE.MeshBasicMaterial({ color: 0x0f172a, transparent: true, opacity: 0.38 }));
@@ -75,11 +77,12 @@ export default function ThreeCanvas({ theme = 'dark', activeSceneId = 'aurora', 
     const prismGeo = new THREE.BufferGeometry();
     const prismPos = new Float32Array(prismCount * 3);
     const prismBase = new Float32Array(prismCount * 3);
+    const prismOffset = isMobile ? 0 : 2.2;
     for (let i = 0; i < prismCount; i++) {
       const phi = Math.acos(1 - 2 * (i + 0.5) / prismCount);
       const theta = Math.PI * (1 + Math.sqrt(5)) * i;
-      const rad = 3.2;
-      const x = rad * Math.sin(phi) * Math.cos(theta) + 2.2;
+      const rad = isMobile ? 2.3 : 3.2;
+      const x = rad * Math.sin(phi) * Math.cos(theta) + prismOffset;
       const y = rad * Math.cos(phi);
       const z = rad * Math.sin(phi) * Math.sin(theta);
       prismPos[i * 3] = x;
@@ -99,13 +102,25 @@ export default function ThreeCanvas({ theme = 'dark', activeSceneId = 'aurora', 
       stateRef.current.my = (e.clientY / window.innerHeight - 0.5) * 2;
     };
 
+    const onTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        stateRef.current.mx = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+        stateRef.current.my = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+      }
+    };
+
     const onResize = () => {
+      const mobile = window.innerWidth < 768;
       camera.aspect = window.innerWidth / window.innerHeight;
+      camera.fov = mobile ? 65 : 58;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      ringsGroup.position.set(mobile ? 0 : 2.4, mobile ? 0.8 : 0.2, -1);
+      ringsGroup.scale.setScalar(mobile ? 0.75 : 1);
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('resize', onResize);
 
     const clock = new THREE.Clock();
@@ -211,6 +226,7 @@ export default function ThreeCanvas({ theme = 'dark', activeSceneId = 'aurora', 
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('resize', onResize);
       pGeo.dispose();
       pMat.dispose();

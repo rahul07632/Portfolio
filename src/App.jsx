@@ -101,7 +101,12 @@ export default function App() {
       const el = document.getElementById(targetId);
       if (el) {
         const timer = setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const navbarHeight = 85;
+          const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: Math.max(0, elementPosition - navbarHeight),
+            behavior: 'smooth'
+          });
         }, 60);
         return () => clearTimeout(timer);
       }

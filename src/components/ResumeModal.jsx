@@ -29,68 +29,56 @@ export default function ResumeModal({ isOpen, onClose }) {
       onClick={(e) => {
         if (e.target.id === 'resumeModal') onClose();
       }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-lg overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/80 backdrop-blur-lg overflow-y-auto"
     >
       <div
-        className="rounded-3xl max-w-5xl w-full h-[90vh] flex flex-col overflow-hidden border shadow-2xl"
+        className="rounded-2xl sm:rounded-3xl max-w-5xl w-full h-[92vh] sm:h-[90vh] flex flex-col overflow-hidden border shadow-2xl"
         style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
       >
         {/* Modal Header */}
         <div
-          className="flex flex-wrap items-center justify-between gap-3 px-5 sm:px-6 py-3.5 border-b"
+          className="flex items-center justify-between gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 border-b"
           style={{ borderColor: 'var(--border)' }}
         >
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 min-w-0">
             <div
-              className="w-8 h-8 rounded-xl border flex items-center justify-center"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl border flex items-center justify-center shrink-0"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-surface)' }}
             >
-              <FileText className="w-4 h-4" style={{ color: 'var(--accent)' }} />
+              <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: 'var(--accent)' }} />
             </div>
-            <div>
-              <h3 className="font-mono text-xs uppercase tracking-wider font-bold" style={{ color: 'var(--accent)' }}>
-                Rahul Vishwakarma · Resume
+            <div className="truncate">
+              <h3 className="font-mono text-[11px] sm:text-xs uppercase tracking-wider font-bold truncate" style={{ color: 'var(--accent)' }}>
+                Rahul Vishwakarma
               </h3>
-              <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                Full-Stack Web Developer | B.Tech CSE (2025)
+              <p className="text-[9.5px] sm:text-[11px] truncate" style={{ color: 'var(--text-muted)' }}>
+                Full-Stack Developer · 2025
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <a
-              href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded-xl text-xs font-mono border inline-flex items-center gap-1.5 hover-lift"
-              style={{ borderColor: 'var(--border)', background: 'var(--bg-surface)' }}
-              title="Open full resume in separate browser tab"
-            >
-              <ExternalLink className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-              <span>New Tab</span>
-            </a>
-
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <a
               id="downloadResumeLink"
               href={resumeUrl}
               download="Rahul_Vishwakarma_Resume.html"
-              className="px-3.5 py-1.5 rounded-xl text-xs font-mono border inline-flex items-center gap-1.5 hover-lift"
+              className="px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono border inline-flex items-center gap-1 hover-lift"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-surface)' }}
               title="Download HTML Resume file"
             >
-              <Download className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-              <span>Download</span>
+              <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: 'var(--accent)' }} />
+              <span className="hidden min-[360px]:inline">Download</span>
             </a>
 
             <button
               id="printResumeBtn"
               type="button"
               onClick={handlePrint}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-mono accent-btn font-semibold inline-flex items-center gap-1.5 hover-lift"
+              className="px-2.5 sm:px-3.5 py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono accent-btn font-semibold inline-flex items-center gap-1 hover-lift"
               title="Print or Save as PDF"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print / PDF</span>
+              <Printer className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span className="hidden min-[360px]:inline">Print</span>
             </button>
 
             <button
@@ -98,7 +86,7 @@ export default function ResumeModal({ isOpen, onClose }) {
               type="button"
               aria-label="Close Resume"
               onClick={onClose}
-              className="p-2 rounded-xl border hover:opacity-80 transition-opacity"
+              className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl border hover:opacity-80 transition-opacity"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-surface)' }}
             >
               <X className="w-4 h-4" />
