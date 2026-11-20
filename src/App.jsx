@@ -16,7 +16,12 @@ import Projects from './sections/Projects';
 import TechStack from './sections/TechStack';
 import Contact from './sections/Contact';
 import { SCENES } from './data/portfolioData';
-import { playThemeSound } from './utils/themeAudio';
+import {
+  toggleAmbientSound,
+  setAmbientTheme,
+  subscribeSoundState,
+  attachAutoplayListener
+} from './utils/themeAudio';
 import './styles.css';
 
 export default function App() {
@@ -33,6 +38,14 @@ export default function App() {
   const [isTouring, setIsTouring] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+
+  // Subscribe to ambient sound engine & attach first-interaction listener
+  useEffect(() => {
+    const unsubscribe = subscribeSoundState(setIsSoundPlaying);
+    attachAutoplayListener(() => theme);
+    return () => unsubscribe();
+  }, [theme]);
   const [toast, setToast] = useState({ visible: false, message: '' });
 
   const location = useLocation();
@@ -102,7 +115,7 @@ export default function App() {
   // Theme toggle with circular clip-path wipe animation & theme audio feedback
   const handleToggleTheme = (e) => {
     const next = theme === 'dark' ? 'light' : 'dark';
-    playThemeSound(next);
+    setAmbientTheme(next);
     const wipe = wipeRef.current;
     if (wipe) {
       const xPct = e?.clientX ? Math.round((e.clientX / window.innerWidth) * 100) : 50;
@@ -340,6 +353,8 @@ export default function App() {
         onStopTour={stopAutoTour}
         onOpenResume={() => setIsResumeOpen(true)}
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
+        isSoundPlaying={isSoundPlaying}
+        onToggleSound={() => toggleAmbientSound(theme)}
       />
 
       {/* Mobile Drawer */}
@@ -349,6 +364,8 @@ export default function App() {
         onOpenResume={() => setIsResumeOpen(true)}
         isTouring={isTouring}
         onToggleTour={toggleAutoTour}
+        isSoundPlaying={isSoundPlaying}
+        onToggleSound={() => toggleAmbientSound(theme)}
       />
 
       {/* 100% Public, Non-Protected Routes (Showcase to Recruiters) */}
