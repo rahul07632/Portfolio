@@ -523,7 +523,7 @@
       items: [
         { name: 'Git & GitHub', role: 'Branching, commit hygiene & repository hosting (rahul07632)' },
         { name: 'Vite', role: 'Fast ES-module bundling and local development server' },
-        { name: 'Netlify & Vercel', role: 'Continuous Git deployment & .env secret management' },
+        { name: 'Vercel & Git', role: 'Continuous Git deployment & .env secret management' },
         { name: 'EmailJS', role: 'Serverless contact form integration & mail routing' }
       ]
     }

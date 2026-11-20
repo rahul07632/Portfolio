@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { PERSONAL_INFO } from "../data/portfolioData";
 
-const SITE_URL = "https://portfolio-r12.netlify.app";
+const SITE_URL = typeof window !== 'undefined' ? window.location.origin : 'https://portfolio-r12.vercel.app';
 
 const routeSeo = {
   "/": {

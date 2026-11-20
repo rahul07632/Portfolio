@@ -16,6 +16,7 @@ import Projects from './sections/Projects';
 import TechStack from './sections/TechStack';
 import Contact from './sections/Contact';
 import { SCENES } from './data/portfolioData';
+import { Analytics } from "@vercel/analytics/react";
 import {
   subscribeSfxState,
   toggleSfx,
@@ -407,6 +408,9 @@ export default function App() {
 
       {/* Toast Notification */}
       <Toast toast={toast} />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 }
