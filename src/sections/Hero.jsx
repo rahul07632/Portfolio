@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
 import { ArrowDownRight, FileText, Zap } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '../components/Icons';
 import MagneticButton from '../components/MagneticButton';
@@ -13,6 +14,22 @@ export default function Hero({
   onOpenResume
 }) {
   const currentScenes = SCENES[theme] || SCENES.dark;
+
+  // Cinematic direct entrance reveal animation
+  useEffect(() => {
+    gsap.fromTo(
+      '.hero-reveal',
+      { y: 35, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.85,
+        stagger: 0.09,
+        ease: 'power3.out',
+        delay: 0.15
+      }
+    );
+  }, []);
 
   return (
     <section id="hero" className="relative z-10 py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">

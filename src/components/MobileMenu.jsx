@@ -88,12 +88,12 @@ export default function MobileMenu({
           {isSoundPlaying ? (
             <>
               <Volume2 className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-              <span>Background Lo-Fi: Playing</span>
+              <span>Interactive Sound: Enabled</span>
             </>
           ) : (
             <>
               <VolumeX className="w-4 h-4 opacity-70" />
-              <span>Background Lo-Fi: Muted</span>
+              <span>Interactive Sound: Muted</span>
             </>
           )}
         </button>

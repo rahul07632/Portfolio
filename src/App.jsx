@@ -17,11 +17,12 @@ import TechStack from './sections/TechStack';
 import Contact from './sections/Contact';
 import { SCENES } from './data/portfolioData';
 import {
-  toggleAmbientSound,
-  setAmbientTheme,
-  subscribeSoundState,
-  attachAutoplayListener
-} from './utils/themeAudio';
+  subscribeSfxState,
+  toggleSfx,
+  setSfxTheme,
+  playThemeSwitchSound,
+  attachGlobalSfxListeners
+} from './utils/sfx';
 import './styles.css';
 
 export default function App() {
@@ -38,18 +39,16 @@ export default function App() {
   const [isTouring, setIsTouring] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
-  const themeRef = useRef(theme);
+  const [isSfxActive, setIsSfxActive] = useState(true);
 
+  // Subscribe to interactive SFX state & attach global hover/click listeners
   useEffect(() => {
-    themeRef.current = theme;
-  }, [theme]);
-
-  // Subscribe to background music engine & attach first-interaction listener
-  useEffect(() => {
-    const unsubscribe = subscribeSoundState(setIsSoundPlaying);
-    attachAutoplayListener(() => themeRef.current);
-    return () => unsubscribe();
+    const unsubscribe = subscribeSfxState(setIsSfxActive);
+    const cleanupSfx = attachGlobalSfxListeners();
+    return () => {
+      unsubscribe();
+      cleanupSfx();
+    };
   }, []);
   const [toast, setToast] = useState({ visible: false, message: '' });
 
@@ -63,6 +62,7 @@ export default function App() {
   // Sync theme attribute and browser favicon
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    setSfxTheme(theme);
     try {
       localStorage.setItem('rv_atelier_theme', theme);
     } catch {}
@@ -117,10 +117,10 @@ export default function App() {
     }, 3000);
   }, []);
 
-  // Theme toggle with circular clip-path wipe animation
+  // Theme toggle with circular clip-path wipe animation & Sci-Fi sound
   const handleToggleTheme = (e) => {
     const next = theme === 'dark' ? 'light' : 'dark';
-    setAmbientTheme(next);
+    playThemeSwitchSound(next);
     const wipe = wipeRef.current;
     if (wipe) {
       const xPct = e?.clientX ? Math.round((e.clientX / window.innerWidth) * 100) : 50;
@@ -333,7 +333,7 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen text-[var(--text)] transition-colors duration-700">
-      {/* Cinematic Entry Curtain */}
+      {/* High-End Kinetic Counter Preloader Intro */}
       <IntroCurtain />
 
       {/* Smooth Radial Theme Wipe Overlay */}
@@ -358,8 +358,8 @@ export default function App() {
         onStopTour={stopAutoTour}
         onOpenResume={() => setIsResumeOpen(true)}
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
-        isSoundPlaying={isSoundPlaying}
-        onToggleSound={() => toggleAmbientSound(theme)}
+        isSoundPlaying={isSfxActive}
+        onToggleSound={toggleSfx}
       />
 
       {/* Mobile Drawer */}
@@ -369,8 +369,8 @@ export default function App() {
         onOpenResume={() => setIsResumeOpen(true)}
         isTouring={isTouring}
         onToggleTour={toggleAutoTour}
-        isSoundPlaying={isSoundPlaying}
-        onToggleSound={() => toggleAmbientSound(theme)}
+        isSoundPlaying={isSfxActive}
+        onToggleSound={toggleSfx}
       />
 
       {/* 100% Public, Non-Protected Routes (Showcase to Recruiters) */}

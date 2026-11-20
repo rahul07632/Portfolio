@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 export default function ThreeCanvas({ theme = 'dark', activeSceneId = 'aurora', shockTrigger = 0 }) {
   const canvasRef = useRef(null);
@@ -30,7 +31,14 @@ export default function ThreeCanvas({ theme = 'dark', activeSceneId = 'aurora', 
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 1.5, 9.5);
+    camera.position.set(0, 1.5, 17.5);
+
+    // Cinematic deep space camera warp glide on entrance
+    gsap.to(camera.position, {
+      z: 9.5,
+      duration: 1.6,
+      ease: 'power3.out'
+    });
 
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

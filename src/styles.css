@@ -5,7 +5,7 @@
 :root,
 [data-theme='dark'] {
   --bg: #0b0d13;
-  --bg-surface: rgba(18, 22, 32, 0.84);
+  --bg-surface: #121620;
   --bg-elevated: #141925;
   --text: #f1f5f9;
   --text-muted: #94a3b8;
@@ -17,7 +17,7 @@
 
 [data-theme='light'] {
   --bg: #f5f2eb;
-  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-surface: #ffffff;
   --bg-elevated: #ffffff;
   --text: #161614;
   --text-muted: #57534e;
@@ -66,8 +66,9 @@ section[id] {
 #introCurtain {
   position: fixed;
   inset: 0;
-  z-index: 100;
-  background: #0b0d13;
+  z-index: 9999;
+  background-color: #090c15 !important;
+  opacity: 1 !important;
   color: #f1f5f9;
   display: flex;
   flex-direction: column;

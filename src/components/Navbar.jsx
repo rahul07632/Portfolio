@@ -98,11 +98,11 @@ export default function Navbar({
             <span>{isTouring ? 'Stop Tour' : 'Auto Tour'}</span>
           </button>
 
-          {/* Background Lo-Fi Music Toggle */}
+          {/* Interactive Sound FX Toggle */}
           <button
             id="ambientSoundBtn"
             type="button"
-            title={isSoundPlaying ? 'Pause background music' : 'Play theme background music'}
+            title={isSoundPlaying ? 'Mute interactive sound effects' : 'Enable interactive sound effects'}
             onClick={(e) => {
               e.stopPropagation();
               onToggleSound();
@@ -118,12 +118,8 @@ export default function Navbar({
           >
             {isSoundPlaying ? (
               <>
-                <span className="flex items-end gap-0.5 h-3.5" aria-hidden="true">
-                  <span className="w-0.5 h-2 bg-current rounded-full animate-pulse" />
-                  <span className="w-0.5 h-3.5 bg-current rounded-full animate-pulse delay-75" />
-                  <span className="w-0.5 h-1.5 bg-current rounded-full animate-pulse delay-150" />
-                </span>
-                <span>Sound</span>
+                <Volume2 className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+                <span>SFX On</span>
               </>
             ) : (
               <>
